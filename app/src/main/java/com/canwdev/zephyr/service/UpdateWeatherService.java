@@ -37,7 +37,7 @@ public class UpdateWeatherService extends Service {
         int eightHours = 1 * 60 * 60 * 1000;
         long triggerAtTime = SystemClock.elapsedRealtime() + eightHours;
         Intent i = new Intent(this, UpdateWeatherService.class);
-        PendingIntent pi = PendingIntent.getService(this, 0, i,0);
+        PendingIntent pi = PendingIntent.getService(this, 0, i, 0);
         manager.cancel(pi);
         manager.set(AlarmManager.ELAPSED_REALTIME, triggerAtTime, pi);
         return super.onStartCommand(intent, flags, startId);
@@ -46,8 +46,9 @@ public class UpdateWeatherService extends Service {
     // 更新天气，保存设置
     private void updateWeather() {
         SharedPreferences prefAllSettings = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE);
-        String setCityWeatherId = "city="+prefAllSettings.getString(Conf.PREF_WEATHER_ID, null);
-        final String weatherUrl = WeatherActivity.WEATHER_API_URL+setCityWeatherId+WeatherActivity.KEY;
+        String setCityWeatherId = "city=" + prefAllSettings.getString(Conf.PREF_WEATHER_ID, null);
+        String apiKey = "&key=" + setCityWeatherId + Conf.getKey(this);
+        final String weatherUrl = WeatherActivity.WEATHER_API_URL + apiKey;
 
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
             @Override
@@ -58,6 +59,8 @@ public class UpdateWeatherService extends Service {
                     SharedPreferences.Editor editor = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE).edit();
                     editor.putString(Conf.PREF_WEATHER_SAVE, responseText);
                     editor.apply();
+                } else if ("invalid key".equals(weather.status)) {
+                    Toast.makeText(UpdateWeatherService.this, "UpdateWeatherService: invalid key", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -76,6 +79,7 @@ public class UpdateWeatherService extends Service {
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String bingPicUrl = response.body().string();

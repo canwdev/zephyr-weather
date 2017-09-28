@@ -40,8 +40,8 @@ import okhttp3.Response;
 public class WeatherActivity extends AppCompatActivity {
 
     public static final String WEATHER_API_URL = "https://free-api.heweather.com/v5/weather?";
-    public static final String KEY = "&key=" + Conf.HEWEATHER_KEY;
-    // public static final String WEATHER_API_URL_SAMPLE = WEATHER_API_URL + CITY_SAMPLE + KEY;
+    private String apiKey;
+    // public static final String WEATHER_API_URL_SAMPLE = WEATHER_API_URL + CITY_SAMPLE + apiKey;
     private String cityWeatherId = "city=CN101240213";
 
     // 各控件
@@ -194,6 +194,7 @@ public class WeatherActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        apiKey = "&key=" + Conf.getKey(WeatherActivity.this);
         String setCityWeatherId = pref.getString(Conf.PREF_WEATHER_ID, null);
         String weatherCache = pref.getString(Conf.PREF_WEATHER_SAVE, null);
         if (weatherCache != null) {
@@ -287,8 +288,7 @@ public class WeatherActivity extends AppCompatActivity {
 
     // 更新天气，保存设置，更新界面
     private void requestWeather(String weatherId) {
-        final String weatherUrl = WEATHER_API_URL + weatherId + KEY;
-
+        final String weatherUrl = WEATHER_API_URL + weatherId + apiKey;
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
@@ -302,6 +302,8 @@ public class WeatherActivity extends AppCompatActivity {
                             editor.putString(Conf.PREF_WEATHER_SAVE, responseText);
                             editor.apply();
                             showWeatherInfo(weather);
+                        } if ("invalid key".equals(weather.status)) {
+                            Toast.makeText(WeatherActivity.this, "invalid key", Toast.LENGTH_SHORT).show();
                         }
                         weatherScrollView.setVisibility(View.VISIBLE);
                         swipeRefresh.setRefreshing(false);

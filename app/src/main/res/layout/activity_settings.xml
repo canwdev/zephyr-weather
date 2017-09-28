@@ -17,24 +17,54 @@
             android:layout_margin="10dp"
             android:orientation="vertical">
 
+            <Button
+                android:id="@+id/button_setArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="0dp"
+                android:gravity="left|center_vertical"
+                android:onClick="button_setArea"
+                android:text="@string/settings_select_area"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/button_customArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:onClick="button_customArea"
+                android:text="@string/settings_custom_area_code"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/button_customKey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:onClick="button_customKey"
+                android:text="@string/settings_custom_api_key"
+                android:textAllCaps="false" />
+
             <Switch
                 android:id="@+id/switch_enableBgImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:text="Enable background image"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"
+                android:text="@string/settings_enable_background_image"
                 android:textAllCaps="false" />
 
             <Switch
                 android:id="@+id/switch_enableBackgroundService"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:text="Enable background update weather"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"
+                android:text="@string/settings_enable_update_service"
                 android:textAllCaps="false" />
 
         </LinearLayout>

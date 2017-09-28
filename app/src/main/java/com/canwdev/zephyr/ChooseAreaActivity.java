@@ -115,7 +115,7 @@ public class ChooseAreaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("https://cdn.heweather.com/china-city-list.txt"));
+                intent.setData(Uri.parse(Conf.HEWEATHER_CITY_LIST));
                 startActivity(intent);
             }
         });

@@ -26,7 +26,7 @@
             android:layout_centerVertical="true"
             android:text="TextView"
             android:textAlignment="center"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorPrimary"
             android:textSize="18sp"
             android:textStyle="bold" />
 

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Zephyr Weather</string>
-    <string name="select_area">Select your area</string>
+    <string name="settings_select_area">Select your area</string>
     <string name="settings">Settings</string>
     <string name="data_source_intro">Data from heweather.com</string>
     <string name="download_image">Download Image</string>
@@ -34,4 +34,8 @@
     <string name="travel">Travel</string>
     <string name="cold">Cold</string>
     <string name="wearing">Wearing</string>
+    <string name="settings_custom_api_key">Custom API key</string>
+    <string name="settings_custom_area_code">Custom area code</string>
+    <string name="settings_enable_background_image">Enable background image</string>
+    <string name="settings_enable_update_service">Enable background update weather (1hour)</string>
 </resources>
