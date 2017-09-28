@@ -1,15 +1,12 @@
-# 微风天气·zephyr-weather
+# 微风天气 · Zephyr Weather
 
 一个简单的 Android 天气应用，使用和风天气接口。
 
 A simple Android weather app using the heweather API.
 
----
-
-### 简介
+* The firet commit code from my another project [learn_android_1stcode](https://github.com/canwdev/learn_android_1stcode)
 
 ---
-
 
 ### Open Source License
 
