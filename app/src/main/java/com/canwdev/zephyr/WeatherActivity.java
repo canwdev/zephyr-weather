@@ -202,6 +202,17 @@ public class WeatherActivity extends AppCompatActivity {
                         Intent iGoSetting = new Intent(WeatherActivity.this, SettingsActivity.class);
                         startActivity(iGoSetting);
                         break;
+                    case R.id.drawer_item_downImage:
+                        loadBgImage();
+                        String pictureUrl = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE).getString(Conf.PREF_BG_URL, null);
+                        if (pictureUrl != null) {
+                            Uri uri = Uri.parse(pictureUrl);
+                            Intent downloadIntent = new Intent(Intent.ACTION_VIEW, uri);
+                            startActivity(downloadIntent);
+                        } else {
+                            Toast.makeText(WeatherActivity.this, "Getting picture url failed", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
                     case R.id.drawer_item_github:
                         Intent iGoGithub = new Intent(Intent.ACTION_VIEW);
                         iGoGithub.setData(Uri.parse(Conf.GITHUB_ADDRESS));
@@ -340,7 +351,7 @@ public class WeatherActivity extends AppCompatActivity {
             TextView infoText = (TextView) view.findViewById(R.id.textView_fStatus);
             TextView maxText = (TextView) view.findViewById(R.id.textView_tMax);
             TextView minText = (TextView) view.findViewById(R.id.textView_tMin);
-            dateText.setText(dailyForecast.date);
+            dateText.setText(dailyForecast.date.substring(5));
             infoText.setText(dailyForecast.condition.info);
             maxText.setText(dailyForecast.temperature.max + "℃");
             minText.setText(dailyForecast.temperature.min + "℃");

@@ -14,7 +14,8 @@
         android:layout_weight="2"
         android:gravity="center_horizontal"
         android:text="Forecast"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textView_hfStatus"
@@ -22,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:gravity="center_horizontal"
         android:text="stat"
         android:textSize="18sp" />

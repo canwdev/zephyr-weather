@@ -3,18 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group>
-    <item
-        android:id="@+id/drawer_item_setArea"
-        android:icon="@drawable/ic_settings_black_24dp"
-        android:title="@string/area_settings" />
+        <item
+            android:id="@+id/drawer_item_setArea"
+            android:icon="@drawable/ic_edit_location_black_24dp"
+            android:title="@string/area_settings" />
     <item
         android:id="@+id/drawer_item_settings"
         android:icon="@drawable/ic_settings_black_24dp"
         android:title="@string/settings" />
     <item
-        android:id="@+id/drawer_item_saveImage"
-        android:icon="@drawable/ic_save_black_24dp"
-        android:title="@string/save_image" />
+        android:id="@+id/drawer_item_downImage"
+        android:icon="@drawable/ic_file_download_black_24dp"
+        android:title="@string/download_image" />
     </group>
 
 
