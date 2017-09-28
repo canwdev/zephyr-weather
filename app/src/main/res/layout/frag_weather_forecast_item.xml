@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:theme="@style/Theme.AppCompat">
+
+    <TextView
+        android:id="@+id/textView_fDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="2"
+        android:gravity="center_horizontal"
+        android:text="Forecast"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textView_fStatus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:text="stat"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textView_tMax"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:text="max"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textView_tMin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:text="min"
+        android:textSize="18sp" />
+
+</LinearLayout>
