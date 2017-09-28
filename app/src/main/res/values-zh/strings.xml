@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">New Weather!!</string>
+    <string name="app_name">微风天气</string>
     <string name="select_area">选择地区</string>
     <string name="settings">设置</string>
     <string name="data_source_intro">数据来自和风天气</string>
