@@ -6,6 +6,8 @@ public class Conf {
     public static final String PREF_WEATHER_ID = "weatherId";
     public static final String PREF_BG_URL = "bgUrl";
     public static final String PREF_WEATHER_SAVE = "weatherCache";
+    public static final String PREF_ENABLE_SERVICE = "enableService";
+    public static final String PREF_ENABLE_BG_IMAGE = "enableBgImage";
 
     public static final String HEWEATHER_CITY_SAMPLE = "city=CN101010100";
     public static final String HEWEATHER_CITY_SAMPLE2 = "city=CN101240213";

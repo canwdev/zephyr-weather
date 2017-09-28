@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.widget.Toast;
 
 import com.canwdev.zephyr.WeatherActivity;
 import com.canwdev.zephyr.gson.Weather;
@@ -32,8 +33,8 @@ public class UpdateWeatherService extends Service {
         updateWeather();
         updateBingPic();
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        // 每8小时更新一次
-        int eightHours = 8 * 60 * 60 * 1000;
+        // 每1小时后台更新一次
+        int eightHours = 1 * 60 * 60 * 1000;
         long triggerAtTime = SystemClock.elapsedRealtime() + eightHours;
         Intent i = new Intent(this, UpdateWeatherService.class);
         PendingIntent pi = PendingIntent.getService(this, 0, i,0);

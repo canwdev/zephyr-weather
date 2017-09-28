@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="170dp"
-    android:background="@drawable/drawer_head_bg"
+    android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
     android:paddingBottom="16dp"
     android:paddingLeft="16dp"
@@ -32,6 +32,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/data_source_intro"
-        android:textColor="@android:color/darker_gray" />
+        android:textColor="@color/colorPrimary" />
 
 </LinearLayout>

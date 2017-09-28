@@ -41,9 +41,9 @@ public class WeatherActivity extends AppCompatActivity {
 
     public static final String WEATHER_API_URL = "https://free-api.heweather.com/v5/weather?";
     public static final String KEY = "&key=" + Conf.HEWEATHER_KEY;
-
     // public static final String WEATHER_API_URL_SAMPLE = WEATHER_API_URL + CITY_SAMPLE + KEY;
     private String cityWeatherId = "city=CN101240213";
+
     // 各控件
     private DrawerLayout mDrawerLayout;
     private Button buttonOpenDrawer;
@@ -79,6 +79,8 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView travelText;
     private TextView uvText;
     private TextView sportText;
+
+    SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,48 +129,7 @@ public class WeatherActivity extends AppCompatActivity {
         travelText = (TextView) findViewById(R.id.textView_travel);
         uvText = (TextView) findViewById(R.id.textView_uv);
 
-        SharedPreferences prefAllSettings = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE);
-        String setCityWeatherId = prefAllSettings.getString(Conf.PREF_WEATHER_ID, null);
-
-        String weatherCache = prefAllSettings.getString(Conf.PREF_WEATHER_SAVE, null);
-        if (weatherCache != null) {
-            // 有缓存时直接解析天气数据
-            Weather weather = Utility.handleWeatherResponse(weatherCache);
-            // cityWeatherId = "city="+weather.basic.weatherId;
-
-            // 检查默认地区设置是否一致
-            if (setCityWeatherId != null) {
-                cityWeatherId = "city=" + setCityWeatherId;
-                if (!weather.basic.weatherId.equals(setCityWeatherId)) {
-                    swipeRefresh.setRefreshing(true);
-                    requestWeather(cityWeatherId);
-                } else {
-                    showWeatherInfo(weather);
-                }
-            } else {
-                showWeatherInfo(weather);
-            }
-        } else {
-            // 无缓存时去服务器查询天气
-            if (setCityWeatherId != null) {
-                cityWeatherId = "city=" + setCityWeatherId;
-                swipeRefresh.setRefreshing(true);
-                requestWeather(cityWeatherId);
-            } else {
-                weatherScrollView.setVisibility(View.INVISIBLE);
-                Intent intent = new Intent(WeatherActivity.this, ChooseAreaActivity.class);
-                // 去选择地区
-                startActivityForResult(intent, 1);
-            }
-        }
-
-        // 背景图检查
-        String pictureUrl = prefAllSettings.getString(Conf.PREF_BG_URL, null);
-        if (pictureUrl != null) {
-            Glide.with(this).load(pictureUrl).into(bgImage);
-        } else {
-            loadBgImage();
-        }
+        pref = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE);
 
         // 下拉刷新动作
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -226,6 +187,58 @@ public class WeatherActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        String setCityWeatherId = pref.getString(Conf.PREF_WEATHER_ID, null);
+        String weatherCache = pref.getString(Conf.PREF_WEATHER_SAVE, null);
+        if (weatherCache != null) {
+            // 有缓存时直接解析天气数据
+            Weather weather = Utility.handleWeatherResponse(weatherCache);
+            // cityWeatherId = "city="+weather.basic.weatherId;
+
+            // 检查默认地区设置是否一致
+            if (setCityWeatherId != null) {
+                cityWeatherId = "city=" + setCityWeatherId;
+                if (!weather.basic.weatherId.equals(setCityWeatherId)) {
+                    swipeRefresh.setRefreshing(true);
+                    requestWeather(cityWeatherId);
+                } else {
+                    showWeatherInfo(weather);
+                }
+            } else {
+                showWeatherInfo(weather);
+            }
+        } else {
+            // 无缓存时去服务器查询天气
+            if (setCityWeatherId != null) {
+                cityWeatherId = "city=" + setCityWeatherId;
+                swipeRefresh.setRefreshing(true);
+                requestWeather(cityWeatherId);
+            } else {
+                weatherScrollView.setVisibility(View.INVISIBLE);
+                Intent intent = new Intent(WeatherActivity.this, ChooseAreaActivity.class);
+                // 去选择地区
+                startActivityForResult(intent, 1);
+            }
+        }
+
+        // 背景图检查
+        String pictureUrl = pref.getString(Conf.PREF_BG_URL, null);
+        Boolean enabledBg = pref.getBoolean(Conf.PREF_ENABLE_BG_IMAGE, true);
+        if (pictureUrl != null) {
+            if (enabledBg) {
+                Glide.with(this).load(pictureUrl).into(bgImage);
+            } else {
+                Glide.with(this).load(getResources().getColor(R.color.colorPrimary)).into(bgImage);
+            }
+        } else {
+            loadBgImage();
+        }
     }
 
     @Override
@@ -246,27 +259,30 @@ public class WeatherActivity extends AppCompatActivity {
 
     // 获取 Bing 每日一图地址，保存地址并设置背景
     private void loadBgImage() {
-        final String bingPicApiUrl = "http://guolin.tech/api/bing_pic";
-        HttpUtil.sendOkHttpRequest(bingPicApiUrl, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
+        if (pref.getBoolean(Conf.PREF_ENABLE_BG_IMAGE, true)) {
+            final String bingPicApiUrl = "http://guolin.tech/api/bing_pic";
+            HttpUtil.sendOkHttpRequest(bingPicApiUrl, new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String bingPicUrl = response.body().string();
-                SharedPreferences.Editor editor = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE).edit();
-                editor.putString(Conf.PREF_BG_URL, bingPicUrl);
-                editor.apply();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Glide.with(WeatherActivity.this).load(bingPicUrl).into(bgImage);
-                    }
-                });
-            }
-        });
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    final String bingPicUrl = response.body().string();
+                    SharedPreferences.Editor editor = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE).edit();
+                    editor.putString(Conf.PREF_BG_URL, bingPicUrl);
+                    editor.apply();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Glide.with(WeatherActivity.this).load(bingPicUrl).into(bgImage);
+                        }
+                    });
+                }
+            });
+        }
+
     }
 
     // 更新天气，保存设置，更新界面
@@ -377,9 +393,14 @@ public class WeatherActivity extends AppCompatActivity {
 
         weatherScrollView.setVisibility(View.VISIBLE);
 
-        // 启动后台天气自动更新服务
-        Intent intent = new Intent(this, UpdateWeatherService.class);
-        startService(intent);
+        if (pref.getBoolean(Conf.PREF_ENABLE_SERVICE, false)) {
+            // 启动后台天气自动更新服务
+            Intent intent = new Intent(this, UpdateWeatherService.class);
+            startService(intent);
+        } else {
+            Intent intent = new Intent(this, UpdateWeatherService.class);
+            stopService(intent);
+        }
     }
 
     @Override
