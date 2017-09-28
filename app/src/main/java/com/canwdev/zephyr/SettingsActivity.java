@@ -10,7 +10,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.Switch;
 
 import com.canwdev.zephyr.util.Conf;
@@ -33,6 +36,10 @@ public class SettingsActivity extends AppCompatActivity {
             // Show the Up button in the action bar.
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView1);
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_card_show);
+        scrollView.startAnimation(animation);
 
         serviceSwitch = (Switch) findViewById(R.id.switch_enableBackgroundService);
         backgroundSwitch = (Switch) findViewById(R.id.switch_enableBgImage);

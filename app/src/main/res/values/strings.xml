@@ -38,4 +38,5 @@
     <string name="settings_custom_area_code">Custom area code</string>
     <string name="settings_enable_background_image">Enable background image</string>
     <string name="settings_enable_update_service">Enable background update weather (1hour)</string>
+    <string name="share_with">Share with</string>
 </resources>

@@ -2,9 +2,7 @@ package com.canwdev.zephyr;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -12,10 +10,12 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,13 +41,14 @@ import okhttp3.Response;
 public class WeatherActivity extends AppCompatActivity {
 
     public static final String WEATHER_API_URL = "https://free-api.heweather.com/v5/weather?";
+    private SharedPreferences pref;
     private String apiKey;
     // public static final String WEATHER_API_URL_SAMPLE = WEATHER_API_URL + CITY_SAMPLE + apiKey;
     private String cityWeatherId = "city=CN101240213";
-
     // 各控件
     private DrawerLayout mDrawerLayout;
     private ImageButton buttonOpenDrawer;
+    private ImageButton buttonShare;
     private SwipeRefreshLayout swipeRefresh;
     private ImageView bgImage;
     private ScrollView weatherScrollView;
@@ -70,7 +71,6 @@ public class WeatherActivity extends AppCompatActivity {
     /* 天气详细信息结束 */
     private LinearLayout hourlyForecastLayout;
     private LinearLayout dailyForecastLayout;
-
     private TextView aqiText;
     private TextView pm25Text;
     private TextView comfortText;
@@ -80,8 +80,7 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView travelText;
     private TextView uvText;
     private TextView sportText;
-
-    SharedPreferences pref;
+    private String shareWeatherText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +96,7 @@ public class WeatherActivity extends AppCompatActivity {
         // 初始化各控件
         mDrawerLayout = (DrawerLayout) findViewById(R.id.weather_drawer);
         buttonOpenDrawer = (ImageButton) findViewById(R.id.button_drawer);
+        buttonShare = (ImageButton) findViewById(R.id.button_shareWeather);
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.SwipeRefresh_weather);
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
         bgImage = (ImageView) findViewById(R.id.imageView_bg);
@@ -145,6 +145,17 @@ public class WeatherActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mDrawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
+        // 分享按钮
+        buttonShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT, shareWeatherText);
+                intent.setType("text/plain");
+                startActivity(Intent.createChooser(intent, getString(R.string.share_with)));
             }
         });
 
@@ -303,7 +314,8 @@ public class WeatherActivity extends AppCompatActivity {
                             editor.putString(Conf.PREF_WEATHER_SAVE, responseText);
                             editor.apply();
                             showWeatherInfo(weather);
-                        } if ("invalid key".equals(weather.status)) {
+                        }
+                        if ("invalid key".equals(weather.status)) {
                             Toast.makeText(WeatherActivity.this, "invalid key", Toast.LENGTH_SHORT).show();
                         }
                         weatherScrollView.setVisibility(View.VISIBLE);
@@ -333,6 +345,11 @@ public class WeatherActivity extends AppCompatActivity {
         titleUpdateTimeText.setText(weather.basic.update.updateTime);
         temperatureText.setText(weather.now.temperature + "℃");
         weatherStatusText.setText(weather.now.condition.info + "天");
+        // 设置分享信息
+        shareWeatherText = weather.basic.cityName + ", "
+                + weather.basic.update.updateTime + ", "
+                + weather.now.temperature + "℃" + ",  "
+                + weather.now.condition.info;
         /* 天气详细信息开始 */
         temperatureDetailText.setText(weather.now.temperature + "℃");
         infoDetailText.setText(weather.now.condition.info);
@@ -377,7 +394,7 @@ public class WeatherActivity extends AppCompatActivity {
             dailyForecastLayout.addView(view);
         }
         // 解析AQI指数
-        LinearLayout LinearLayoutAqi = (LinearLayout) findViewById(R.id.LinearLayout_aqi);
+        CardView LinearLayoutAqi = (CardView) findViewById(R.id.CardView_aqi);
         if (weather.aqi != null) {
             aqiText.setText(weather.aqi.city.aqi);
             pm25Text.setText(weather.aqi.city.pm25);
@@ -386,15 +403,17 @@ public class WeatherActivity extends AppCompatActivity {
             LinearLayoutAqi.setVisibility(View.GONE);
         }
 
-        comfortText.setText("["+weather.suggestion.comfort.title+"] "+weather.suggestion.comfort.info);
-        carWashText.setText("["+weather.suggestion.carWash.title+"] "+weather.suggestion.carWash.info);
-        wearingText.setText("["+weather.suggestion.wearing.title+"] "+weather.suggestion.wearing.info);
-        influenzaText.setText("["+weather.suggestion.influenza.title+"] "+weather.suggestion.influenza.info);
-        sportText.setText("["+weather.suggestion.sport.title+"] "+weather.suggestion.sport.info);
-        travelText.setText("["+weather.suggestion.travel.title+"] "+weather.suggestion.travel.info);
-        uvText.setText("["+weather.suggestion.uv.title+"] "+weather.suggestion.uv.info);
+        comfortText.setText("[" + weather.suggestion.comfort.title + "] " + weather.suggestion.comfort.info);
+        carWashText.setText("[" + weather.suggestion.carWash.title + "] " + weather.suggestion.carWash.info);
+        wearingText.setText("[" + weather.suggestion.wearing.title + "] " + weather.suggestion.wearing.info);
+        influenzaText.setText("[" + weather.suggestion.influenza.title + "] " + weather.suggestion.influenza.info);
+        sportText.setText("[" + weather.suggestion.sport.title + "] " + weather.suggestion.sport.info);
+        travelText.setText("[" + weather.suggestion.travel.title + "] " + weather.suggestion.travel.info);
+        uvText.setText("[" + weather.suggestion.uv.title + "] " + weather.suggestion.uv.info);
 
         weatherScrollView.setVisibility(View.VISIBLE);
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_card_show);
+        weatherScrollView.startAnimation(animation);
 
         if (pref.getBoolean(Conf.PREF_ENABLE_SERVICE, false)) {
             // 启动后台天气自动更新服务
