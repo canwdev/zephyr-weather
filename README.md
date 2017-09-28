@@ -4,7 +4,7 @@
 
 A simple Android weather app using the heweather API.
 
-* The firet commit code from my another project [learn_android_1stcode](https://github.com/canwdev/learn_android_1stcode)
+* The first commit code from my another project [learn_android_1stcode](https://github.com/canwdev/learn_android_1stcode)
 
 ---
 
