@@ -69,10 +69,15 @@ public class WeatherActivity extends AppCompatActivity {
     /* 天气详细信息结束 */
     private LinearLayout hourlyForecastLayout;
     private LinearLayout dailyForecastLayout;
+
     private TextView aqiText;
     private TextView pm25Text;
     private TextView comfortText;
+    private TextView wearingText;
+    private TextView influenzaText;
     private TextView carWashText;
+    private TextView travelText;
+    private TextView uvText;
     private TextView sportText;
 
     @Override
@@ -116,7 +121,11 @@ public class WeatherActivity extends AppCompatActivity {
         pm25Text = (TextView) findViewById(R.id.textView_pm25);
         comfortText = (TextView) findViewById(R.id.textView_comfort);
         carWashText = (TextView) findViewById(R.id.textView_carWash);
+        wearingText = (TextView) findViewById(R.id.textView_wearing);
+        influenzaText = (TextView) findViewById(R.id.textView_influenza);
         sportText = (TextView) findViewById(R.id.textView_sport);
+        travelText = (TextView) findViewById(R.id.textView_travel);
+        uvText = (TextView) findViewById(R.id.textView_uv);
 
         SharedPreferences prefAllSettings = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE);
         String setCityWeatherId = prefAllSettings.getString(Conf.PREF_WEATHER_ID, null);
@@ -346,9 +355,15 @@ public class WeatherActivity extends AppCompatActivity {
         } else {
             LinearLayoutAqi.setVisibility(View.GONE);
         }
-        comfortText.setText(weather.suggestion.comfort.info);
-        carWashText.setText(weather.suggestion.carWash.info);
-        sportText.setText(weather.suggestion.sport.info);
+
+        comfortText.setText("["+weather.suggestion.comfort.title+"] "+weather.suggestion.comfort.info);
+        carWashText.setText("["+weather.suggestion.carWash.title+"] "+weather.suggestion.carWash.info);
+        wearingText.setText("["+weather.suggestion.wearing.title+"] "+weather.suggestion.wearing.info);
+        influenzaText.setText("["+weather.suggestion.influenza.title+"] "+weather.suggestion.influenza.info);
+        sportText.setText("["+weather.suggestion.sport.title+"] "+weather.suggestion.sport.info);
+        travelText.setText("["+weather.suggestion.travel.title+"] "+weather.suggestion.travel.info);
+        uvText.setText("["+weather.suggestion.uv.title+"] "+weather.suggestion.uv.info);
+
         weatherScrollView.setVisibility(View.VISIBLE);
 
         // 启动后台天气自动更新服务

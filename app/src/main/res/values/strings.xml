@@ -6,9 +6,9 @@
     <string name="save_image">Save Image</string>
     <string name="area_settings">Set Area</string>
     <string name="suggestion">Suggestion</string>
-    <string name="comfortable">Comfortable:</string>
-    <string name="car_washing">Car Washing:</string>
-    <string name="sport">Sport:</string>
+    <string name="comfortable">Comfortable</string>
+    <string name="car_washing">Car Washing</string>
+    <string name="sport">Sport</string>
     <string name="dailyForecast">Daily Forecast</string>
     <string name="air_quality">Air Quality</string>
     <string name="aqi">AQI</string>
@@ -30,4 +30,8 @@
     <string name="pressure">Pressure</string>
     <string name="hourlyForecast">Hourly Forcast</string>
     <string name="precipitation_probability">Precipitation probability</string>
+    <string name="uv">UV</string>
+    <string name="travel">Travel</string>
+    <string name="cold">Cold</string>
+    <string name="wearing">Wearing</string>
 </resources>

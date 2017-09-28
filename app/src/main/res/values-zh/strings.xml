@@ -8,9 +8,9 @@
     <string name="area_settings">地区设置</string>
     <string name="dailyForecast">明后天预报</string>
     <string name="aqi">空气质量指数</string>
-    <string name="comfortable">舒适度：</string>
-    <string name="car_washing">洗车指数：</string>
-    <string name="sport">运动指数：</string>
+    <string name="comfortable">舒适度</string>
+    <string name="car_washing">洗车指数</string>
+    <string name="sport">运动指数</string>
     <string name="suggestion">生活建议</string>
     <string name="tools">工具</string>
     <string name="air_quality">空气质量</string>
@@ -29,4 +29,8 @@
     <string name="pressure">气压</string>
     <string name="hourlyForecast">未来每小时预报</string>
     <string name="precipitation_probability">降水概率</string>
+    <string name="cold">感冒指数</string>
+    <string name="travel">旅游指数</string>
+    <string name="uv">紫外线指数</string>
+    <string name="wearing">穿衣建议</string>
 </resources>

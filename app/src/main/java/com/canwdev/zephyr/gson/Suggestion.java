@@ -8,6 +8,9 @@ public class Suggestion {
     public Comfort comfort;
 
     public class Comfort {
+        @SerializedName("brf")
+        public String title;
+
         @SerializedName("txt")
         public String info;
     }
@@ -16,6 +19,31 @@ public class Suggestion {
     public CarWash carWash;
 
     public class CarWash {
+        @SerializedName("brf")
+        public String title;
+
+        @SerializedName("txt")
+        public String info;
+    }
+
+    @SerializedName("drsg")
+    public Wearing wearing;
+
+    public class Wearing {
+        @SerializedName("brf")
+        public String title;
+
+        @SerializedName("txt")
+        public String info;
+    }
+
+    @SerializedName("flu")
+    public Influenza influenza;
+
+    public class Influenza {
+        @SerializedName("brf")
+        public String title;
+
         @SerializedName("txt")
         public String info;
     }
@@ -23,6 +51,31 @@ public class Suggestion {
     public Sport sport;
 
     public class Sport {
+        @SerializedName("brf")
+        public String title;
+
+        @SerializedName("txt")
+        public String info;
+    }
+
+    @SerializedName("trav")
+    public Travel travel;
+
+    public class Travel {
+        @SerializedName("brf")
+        public String title;
+
+        @SerializedName("txt")
+        public String info;
+    }
+
+    @SerializedName("uv")
+    public Uv uv;
+
+    public class Uv {
+        @SerializedName("brf")
+        public String title;
+
         @SerializedName("txt")
         public String info;
     }
