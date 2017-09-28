@@ -4,13 +4,13 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,8 +43,8 @@ public class ChooseAreaActivity extends AppCompatActivity {
     // 各控件
     private ProgressDialog progressDialog;
     private TextView titleText;
-    private Button buttonBack;
-    private Button buttonHelp;
+    private ImageButton buttonBack;
+    private ImageButton buttonHelp;
     private ListView listView;
 
     // 数据
@@ -67,8 +67,8 @@ public class ChooseAreaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_choose_area);
 
         titleText = (TextView) findViewById(R.id.textView_fca_title);
-        buttonBack = (Button) findViewById(R.id.button_fca_back);
-        buttonHelp = (Button) findViewById(R.id.button_fca_hlep);
+        buttonBack = (ImageButton) findViewById(R.id.button_fca_back);
+        buttonHelp = (ImageButton) findViewById(R.id.button_fca_hlep);
         listView = (ListView) findViewById(R.id.listView_fca_area);
         adapter = new ArrayAdapter<String>(this
                 , android.R.layout.simple_list_item_1, dataList);
