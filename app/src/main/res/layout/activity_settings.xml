@@ -21,9 +21,11 @@
                 android:id="@+id/button_setArea"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
                 android:elevation="0dp"
                 android:gravity="left|center_vertical"
                 android:onClick="button_setArea"
+                android:paddingLeft="10dp"
                 android:text="@string/settings_select_area"
                 android:textAllCaps="false" />
 
@@ -31,8 +33,10 @@
                 android:id="@+id/button_customArea"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
                 android:gravity="left|center_vertical"
                 android:onClick="button_customArea"
+                android:paddingLeft="10dp"
                 android:text="@string/settings_custom_area_code"
                 android:textAllCaps="false" />
 
@@ -40,8 +44,10 @@
                 android:id="@+id/button_customKey"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
                 android:gravity="left|center_vertical"
                 android:onClick="button_customKey"
+                android:paddingLeft="10dp"
                 android:text="@string/settings_custom_api_key"
                 android:textAllCaps="false" />
 
@@ -49,10 +55,11 @@
                 android:id="@+id/switch_enableBgImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:paddingBottom="15dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:paddingTop="10dp"
+                android:paddingTop="15dp"
                 android:text="@string/settings_enable_background_image"
                 android:textAllCaps="false" />
 
@@ -60,10 +67,11 @@
                 android:id="@+id/switch_enableBackgroundService"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:paddingBottom="15dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:paddingTop="10dp"
+                android:paddingTop="15dp"
                 android:text="@string/settings_enable_update_service"
                 android:textAllCaps="false" />
 

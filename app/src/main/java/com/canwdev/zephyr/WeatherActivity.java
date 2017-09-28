@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -46,7 +47,7 @@ public class WeatherActivity extends AppCompatActivity {
 
     // 各控件
     private DrawerLayout mDrawerLayout;
-    private Button buttonOpenDrawer;
+    private ImageButton buttonOpenDrawer;
     private SwipeRefreshLayout swipeRefresh;
     private ImageView bgImage;
     private ScrollView weatherScrollView;
@@ -87,15 +88,15 @@ public class WeatherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
         // 适配透明状态
-        if (Build.VERSION.SDK_INT >= 21) {
+        /*if (Build.VERSION.SDK_INT >= 21) {
             View decorView = getWindow().getDecorView();
             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             getWindow().setStatusBarColor(Color.TRANSPARENT);
-        }
+        }*/
         // 初始化各控件
         mDrawerLayout = (DrawerLayout) findViewById(R.id.weather_drawer);
-        buttonOpenDrawer = (Button) findViewById(R.id.button_drawer);
+        buttonOpenDrawer = (ImageButton) findViewById(R.id.button_drawer);
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.SwipeRefresh_weather);
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
         bgImage = (ImageView) findViewById(R.id.imageView_bg);

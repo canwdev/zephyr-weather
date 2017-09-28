@@ -99,7 +99,7 @@ public class ChooseAreaActivity extends AppCompatActivity {
                 }
             }
         });
-        // 返回按钮
+        // 按钮返回
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,6 +107,8 @@ public class ChooseAreaActivity extends AppCompatActivity {
                     queryCities();
                 } else if (currentLevel == LEVEL_CITY) {
                     queryProvinces();
+                } else if (currentLevel == LEVEL_PROVINCE) {
+                    finish();
                 }
             }
         });
@@ -125,7 +127,7 @@ public class ChooseAreaActivity extends AppCompatActivity {
 
     private void queryProvinces() {
         titleText.setText("选择省");
-        buttonBack.setVisibility(View.GONE);
+        // buttonBack.setVisibility(View.GONE);
         provinceList = DataSupport.findAll(Province.class);
         if (provinceList.size() > 0) {
             dataList.clear();
