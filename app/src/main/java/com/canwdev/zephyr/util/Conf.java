@@ -7,6 +7,8 @@ public class Conf {
     public static final String PREF_BG_URL = "bgUrl";
     public static final String PREF_WEATHER_SAVE = "weatherCache";
 
+    public static final String HEWEATHER_CITY_SAMPLE = "city=CN101010100";
+    public static final String HEWEATHER_CITY_SAMPLE2 = "city=CN101240213";
     public static final String HEWEATHER_KEY = "74ac2716affa4279b5db3898be81c25d";
     public static final String GITHUB_ADDRESS = "https://github.com/canwdev/zephyr-weather";
 }

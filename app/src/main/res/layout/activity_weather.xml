@@ -37,15 +37,11 @@
                     android:orientation="vertical">
 
                     <include layout="@layout/frag_weather_title" />
-
                     <include layout="@layout/frag_weather_now" />
-
                     <include layout="@layout/frag_weather_now_detial" />
-
-                    <include layout="@layout/frag_weather_forecast" />
-
+                    <include layout="@layout/frag_weather_hourly_forecast" />
+                    <include layout="@layout/frag_weather_daily_forecast" />
                     <include layout="@layout/frag_weather_aqi" />
-
                     <include layout="@layout/frag_weather_suggestion" />
                 </LinearLayout>
             </ScrollView>

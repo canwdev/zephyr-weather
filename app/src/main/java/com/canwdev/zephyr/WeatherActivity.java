@@ -23,7 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.canwdev.zephyr.gson.Forecast;
+import com.canwdev.zephyr.gson.DailyForecast;
+import com.canwdev.zephyr.gson.HourlyForecast;
 import com.canwdev.zephyr.gson.Weather;
 import com.canwdev.zephyr.service.UpdateWeatherService;
 import com.canwdev.zephyr.util.Conf;
@@ -40,7 +41,7 @@ public class WeatherActivity extends AppCompatActivity {
 
     public static final String WEATHER_API_URL = "https://free-api.heweather.com/v5/weather?";
     public static final String KEY = "&key=" + Conf.HEWEATHER_KEY;
-    private static final String CITY_SAMPLE = "city=CN101010100";
+
     // public static final String WEATHER_API_URL_SAMPLE = WEATHER_API_URL + CITY_SAMPLE + KEY;
     private String cityWeatherId = "city=CN101240213";
     // 各控件
@@ -57,6 +58,7 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView temperatureDetailText;
     private TextView infoDetailText;
     private TextView fellingDetailText;
+    private TextView pressureDetailText;
     private TextView humidityDetailText;
     private TextView precipitationDetailText;
     private TextView visibilityDetailText;
@@ -65,7 +67,8 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView windforceDetailText;
     private TextView speedDetailText;
     /* 天气详细信息结束 */
-    private LinearLayout forecastLayout;
+    private LinearLayout hourlyForecastLayout;
+    private LinearLayout dailyForecastLayout;
     private TextView aqiText;
     private TextView pm25Text;
     private TextView comfortText;
@@ -98,6 +101,7 @@ public class WeatherActivity extends AppCompatActivity {
         temperatureDetailText = (TextView) findViewById(R.id.temperature);
         infoDetailText = (TextView) findViewById(R.id.info);
         fellingDetailText = (TextView) findViewById(R.id.felling);
+        pressureDetailText = (TextView) findViewById(R.id.pressure);
         humidityDetailText = (TextView) findViewById(R.id.humidity);
         precipitationDetailText = (TextView) findViewById(R.id.precipitation);
         visibilityDetailText = (TextView) findViewById(R.id.visibility);
@@ -106,7 +110,8 @@ public class WeatherActivity extends AppCompatActivity {
         windforceDetailText = (TextView) findViewById(R.id.windforce);
         speedDetailText = (TextView) findViewById(R.id.speed);
         /* 天气详细信息结束 */
-        forecastLayout = (LinearLayout) findViewById(R.id.LinearLayout_forecast);
+        hourlyForecastLayout = (LinearLayout) findViewById(R.id.LinearLayout_hourlyForecast);
+        dailyForecastLayout = (LinearLayout) findViewById(R.id.LinearLayout_dailyForecast);
         aqiText = (TextView) findViewById(R.id.textView_aqi);
         pm25Text = (TextView) findViewById(R.id.textView_pm25);
         comfortText = (TextView) findViewById(R.id.textView_comfort);
@@ -286,13 +291,14 @@ public class WeatherActivity extends AppCompatActivity {
 
     private void showWeatherInfo(Weather weather) {
         titleCityText.setText(weather.basic.cityName);
-        titleUpdateTimeText.setText(weather.basic.update.updateTime.split(" ")[1]);
+        titleUpdateTimeText.setText(weather.basic.update.updateTime);
         temperatureText.setText(weather.now.temperature + "℃");
-        weatherStatusText.setText(weather.now.condition.info);
+        weatherStatusText.setText(weather.now.condition.info + "天");
         /* 天气详细信息开始 */
         temperatureDetailText.setText(weather.now.temperature + "℃");
         infoDetailText.setText(weather.now.condition.info);
         fellingDetailText.setText(weather.now.felling + "℃");
+        pressureDetailText.setText(weather.now.pressure);
         humidityDetailText.setText(weather.now.humidity + "%");
         precipitationDetailText.setText(weather.now.precipitation + "mm");
         visibilityDetailText.setText(weather.now.visibility + "km");
@@ -301,21 +307,37 @@ public class WeatherActivity extends AppCompatActivity {
         windforceDetailText.setText(weather.now.wind.windforce + "级");
         speedDetailText.setText(weather.now.wind.speed + "kmph");
         /* 天气详细信息结束 */
-        forecastLayout.removeAllViews();
-        for (Forecast forecast : weather.forecastList) {
+        // 解析几小时预报
+        hourlyForecastLayout.removeAllViews();
+        for (HourlyForecast hourlyForecast : weather.hourlyForecastList) {
             View view = LayoutInflater.from(this)
-                    .inflate(R.layout.frag_weather_forecast_item, forecastLayout, false);
+                    .inflate(R.layout.frag_weather_hourly_forecast_item, hourlyForecastLayout, false);
+            TextView timeText = (TextView) view.findViewById(R.id.textView_hfTime);
+            TextView statusText = (TextView) view.findViewById(R.id.textView_hfStatus);
+            TextView tempe = (TextView) view.findViewById(R.id.textView_hfTempe);
+            TextView probability = (TextView) view.findViewById(R.id.textView_hfPop);
+            timeText.setText(hourlyForecast.date.split(" ")[1]);
+            statusText.setText(hourlyForecast.condition.info);
+            tempe.setText(hourlyForecast.temperature + "℃");
+            probability.setText(hourlyForecast.probability + "%");
+            hourlyForecastLayout.addView(view);
+        }
+        // 解析几天预报
+        dailyForecastLayout.removeAllViews();
+        for (DailyForecast dailyForecast : weather.dailyForecastList) {
+            View view = LayoutInflater.from(this)
+                    .inflate(R.layout.frag_weather_daily_forecast_item, dailyForecastLayout, false);
             TextView dateText = (TextView) view.findViewById(R.id.textView_fDate);
             TextView infoText = (TextView) view.findViewById(R.id.textView_fStatus);
             TextView maxText = (TextView) view.findViewById(R.id.textView_tMax);
             TextView minText = (TextView) view.findViewById(R.id.textView_tMin);
-            dateText.setText(forecast.date);
-            infoText.setText(forecast.more.info);
-            maxText.setText(forecast.temperature.max + "℃");
-            minText.setText(forecast.temperature.min + "℃");
-            forecastLayout.addView(view);
+            dateText.setText(dailyForecast.date);
+            infoText.setText(dailyForecast.condition.info);
+            maxText.setText(dailyForecast.temperature.max + "℃");
+            minText.setText(dailyForecast.temperature.min + "℃");
+            dailyForecastLayout.addView(view);
         }
-
+        // 解析AQI指数
         LinearLayout LinearLayoutAqi = (LinearLayout) findViewById(R.id.LinearLayout_aqi);
         if (weather.aqi != null) {
             aqiText.setText(weather.aqi.city.aqi);

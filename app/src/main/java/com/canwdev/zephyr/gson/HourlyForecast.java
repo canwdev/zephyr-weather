@@ -2,10 +2,8 @@ package com.canwdev.zephyr.gson;
 
 import com.google.gson.annotations.SerializedName;
 
-// 今日天气
-public class Now {
-    @SerializedName("tmp")
-    public String temperature;
+public class HourlyForecast {
+    public String date;
 
     @SerializedName("cond")
     public Condition condition;
@@ -15,20 +13,17 @@ public class Now {
         public String info;
     }
 
-    @SerializedName("fl")
-    public String felling;
-
     @SerializedName("hum")
     public String humidity;
 
-    @SerializedName("pcpn")
-    public String precipitation;
+    @SerializedName("pop")
+    public String probability;
 
     @SerializedName("pres")
     public String pressure;
 
-    @SerializedName("vis")
-    public String visibility;
+    @SerializedName("tmp")
+    public String temperature;
 
     public Wind wind;
 

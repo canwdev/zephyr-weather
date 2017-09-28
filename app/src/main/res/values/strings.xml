@@ -9,7 +9,7 @@
     <string name="comfortable">Comfortable:</string>
     <string name="car_washing">Car Washing:</string>
     <string name="sport">Sport:</string>
-    <string name="forecast">Forecast</string>
+    <string name="dailyForecast">Daily Forecast</string>
     <string name="air_quality">Air Quality</string>
     <string name="aqi">AQI</string>
     <string name="pm_2_5">PM2.5</string>
@@ -27,4 +27,7 @@
     <string name="windforce">Wind-force</string>
     <string name="speed">Wind-speed</string>
     <string name="weather_info">Weather</string>
+    <string name="pressure">Pressure</string>
+    <string name="hourlyForecast">Hourly Forcast</string>
+    <string name="precipitation_probability">Precipitation probability</string>
 </resources>

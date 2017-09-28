@@ -12,13 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="@string/forecast"
+        android:text="@string/dailyForecast"
         android:textColor="@android:color/background_light"
         android:textSize="18sp"
         android:textStyle="bold" />
 
     <LinearLayout
-        android:id="@+id/LinearLayout_forecast"
+        android:id="@+id/LinearLayout_dailyForecast"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
