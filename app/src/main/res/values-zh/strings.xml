@@ -15,4 +15,15 @@
     <string name="tools">工具</string>
     <string name="air_quality">空气质量</string>
     <string name="about">关于</string>
+    <string name="windforce">风力</string>
+    <string name="weather_info">天气</string>
+    <string name="visibility">能见度</string>
+    <string name="temperature">气温</string>
+    <string name="speed">风速</string>
+    <string name="precipitation">降水量</string>
+    <string name="felling">体感温度</string>
+    <string name="direction">风向</string>
+    <string name="now_detail">实况天气</string>
+    <string name="degree">风向 360°</string>
+    <string name="humidity">湿度</string>
 </resources>

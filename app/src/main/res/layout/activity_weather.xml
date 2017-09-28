@@ -40,6 +40,8 @@
 
                     <include layout="@layout/frag_weather_now" />
 
+                    <include layout="@layout/frag_weather_now_detial" />
+
                     <include layout="@layout/frag_weather_forecast" />
 
                     <include layout="@layout/frag_weather_aqi" />

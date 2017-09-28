@@ -53,6 +53,18 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView titleUpdateTimeText;
     private TextView temperatureText;
     private TextView weatherStatusText;
+    /* 天气详细信息开始 */
+    private TextView temperatureDetailText;
+    private TextView infoDetailText;
+    private TextView fellingDetailText;
+    private TextView humidityDetailText;
+    private TextView precipitationDetailText;
+    private TextView visibilityDetailText;
+    private TextView degreeDetailText;
+    private TextView directionDetailText;
+    private TextView windforceDetailText;
+    private TextView speedDetailText;
+    /* 天气详细信息结束 */
     private LinearLayout forecastLayout;
     private TextView aqiText;
     private TextView pm25Text;
@@ -75,13 +87,25 @@ public class WeatherActivity extends AppCompatActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.weather_drawer);
         buttonOpenDrawer = (Button) findViewById(R.id.button_drawer);
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.SwipeRefresh_weather);
-        swipeRefresh.setColorSchemeResources(R.color.colorPrimary,R.color.colorAccent);
+        swipeRefresh.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
         bgImage = (ImageView) findViewById(R.id.imageView_bg);
         weatherScrollView = (ScrollView) findViewById(R.id.ScrollView_weather);
         titleCityText = (TextView) findViewById(R.id.textView_cityName);
         titleUpdateTimeText = (TextView) findViewById(R.id.textView_updateTime);
         temperatureText = (TextView) findViewById(R.id.textView_tDegree);
         weatherStatusText = (TextView) findViewById(R.id.textView_tStatus);
+        /* 天气详细信息开始 */
+        temperatureDetailText = (TextView) findViewById(R.id.temperature);
+        infoDetailText = (TextView) findViewById(R.id.info);
+        fellingDetailText = (TextView) findViewById(R.id.felling);
+        humidityDetailText = (TextView) findViewById(R.id.humidity);
+        precipitationDetailText = (TextView) findViewById(R.id.precipitation);
+        visibilityDetailText = (TextView) findViewById(R.id.visibility);
+        degreeDetailText = (TextView) findViewById(R.id.degree);
+        directionDetailText = (TextView) findViewById(R.id.direction);
+        windforceDetailText = (TextView) findViewById(R.id.windforce);
+        speedDetailText = (TextView) findViewById(R.id.speed);
+        /* 天气详细信息结束 */
         forecastLayout = (LinearLayout) findViewById(R.id.LinearLayout_forecast);
         aqiText = (TextView) findViewById(R.id.textView_aqi);
         pm25Text = (TextView) findViewById(R.id.textView_pm25);
@@ -93,14 +117,14 @@ public class WeatherActivity extends AppCompatActivity {
         String setCityWeatherId = prefAllSettings.getString(Conf.PREF_WEATHER_ID, null);
 
         String weatherCache = prefAllSettings.getString(Conf.PREF_WEATHER_SAVE, null);
-        if (weatherCache!=null) {
+        if (weatherCache != null) {
             // 有缓存时直接解析天气数据
             Weather weather = Utility.handleWeatherResponse(weatherCache);
             // cityWeatherId = "city="+weather.basic.weatherId;
 
             // 检查默认地区设置是否一致
             if (setCityWeatherId != null) {
-                cityWeatherId = "city="+setCityWeatherId;
+                cityWeatherId = "city=" + setCityWeatherId;
                 if (!weather.basic.weatherId.equals(setCityWeatherId)) {
                     swipeRefresh.setRefreshing(true);
                     requestWeather(cityWeatherId);
@@ -113,7 +137,7 @@ public class WeatherActivity extends AppCompatActivity {
         } else {
             // 无缓存时去服务器查询天气
             if (setCityWeatherId != null) {
-                cityWeatherId = "city="+setCityWeatherId;
+                cityWeatherId = "city=" + setCityWeatherId;
                 swipeRefresh.setRefreshing(true);
                 requestWeather(cityWeatherId);
             } else {
@@ -126,7 +150,7 @@ public class WeatherActivity extends AppCompatActivity {
 
         // 背景图检查
         String pictureUrl = prefAllSettings.getString(Conf.PREF_BG_URL, null);
-        if (pictureUrl!=null) {
+        if (pictureUrl != null) {
             Glide.with(this).load(pictureUrl).into(bgImage);
         } else {
             loadBgImage();
@@ -155,10 +179,14 @@ public class WeatherActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.drawer_item_settings:
-                        Intent iGoSettings = new Intent(WeatherActivity.this, ChooseAreaActivity.class);
+                    case R.id.drawer_item_setArea:
+                        Intent iSetArea = new Intent(WeatherActivity.this, ChooseAreaActivity.class);
                         // 去选择地区
-                        startActivityForResult(iGoSettings, 1);
+                        startActivityForResult(iSetArea, 1);
+                        break;
+                    case R.id.drawer_item_settings:
+                        Intent iGoSetting = new Intent(WeatherActivity.this, SettingsActivity.class);
+                        startActivity(iGoSetting);
                         break;
                     case R.id.drawer_item_github:
                         Intent iGoGithub = new Intent(Intent.ACTION_VIEW);
@@ -174,13 +202,14 @@ public class WeatherActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case 1:
                 if (resultCode == RESULT_OK) {
                     // 接收更改地区的 Intent 返回值
-                    String rCityWeatherId = "city="+data.getStringExtra("city_weather_id");
+                    String rCityWeatherId = "city=" + data.getStringExtra("city_weather_id");
                     cityWeatherId = rCityWeatherId;
                     swipeRefresh.setRefreshing(true);
                     requestWeather(rCityWeatherId);
@@ -217,7 +246,7 @@ public class WeatherActivity extends AppCompatActivity {
 
     // 更新天气，保存设置，更新界面
     private void requestWeather(String weatherId) {
-        final String weatherUrl = WEATHER_API_URL+weatherId+KEY;
+        final String weatherUrl = WEATHER_API_URL + weatherId + KEY;
 
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
             @Override
@@ -259,7 +288,19 @@ public class WeatherActivity extends AppCompatActivity {
         titleCityText.setText(weather.basic.cityName);
         titleUpdateTimeText.setText(weather.basic.update.updateTime.split(" ")[1]);
         temperatureText.setText(weather.now.temperature + "℃");
-        weatherStatusText.setText(weather.now.more.info);
+        weatherStatusText.setText(weather.now.condition.info);
+        /* 天气详细信息开始 */
+        temperatureDetailText.setText(weather.now.temperature + "℃");
+        infoDetailText.setText(weather.now.condition.info);
+        fellingDetailText.setText(weather.now.felling + "℃");
+        humidityDetailText.setText(weather.now.humidity + "%");
+        precipitationDetailText.setText(weather.now.precipitation + "mm");
+        visibilityDetailText.setText(weather.now.visibility + "km");
+        degreeDetailText.setText(weather.now.wind.degree);
+        directionDetailText.setText(weather.now.wind.direction);
+        windforceDetailText.setText(weather.now.wind.windforce + "级");
+        speedDetailText.setText(weather.now.wind.speed + "kmph");
+        /* 天气详细信息结束 */
         forecastLayout.removeAllViews();
         for (Forecast forecast : weather.forecastList) {
             View view = LayoutInflater.from(this)

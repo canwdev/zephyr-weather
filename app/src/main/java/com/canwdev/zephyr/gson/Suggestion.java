@@ -2,6 +2,7 @@ package com.canwdev.zephyr.gson;
 
 import com.google.gson.annotations.SerializedName;
 
+// 生活建议
 public class Suggestion {
     @SerializedName("comf")
     public Comfort comfort;

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-// @All of the JSON Data
+// @All of the JSON Data 天气类，全部信息
 public class Weather {
     public String status;
     public Basic basic;

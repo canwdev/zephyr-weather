@@ -2,6 +2,7 @@ package com.canwdev.zephyr.gson;
 
 import com.google.gson.annotations.SerializedName;
 
+// 天气预报
 public class Forecast {
     public String date;
 

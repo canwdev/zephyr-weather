@@ -1,5 +1,6 @@
 package com.canwdev.zephyr.gson;
 
+// 空气质量
 public class AQI {
     public AQICity city;
 
