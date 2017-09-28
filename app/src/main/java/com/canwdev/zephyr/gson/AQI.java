@@ -1,4 +1,4 @@
-package com.example.myweather.gson;
+package com.canwdev.zephyr.gson;
 
 public class AQI {
     public AQICity city;

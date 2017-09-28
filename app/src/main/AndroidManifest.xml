@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.myweather">
+    package="com.canwdev.zephyr">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".WeatherActivity"
+            android:name="com.canwdev.zephyr.WeatherActivity"
             android:label="@string/app_name"
             android:theme="@style/AppThemeNoActionBar">
             <intent-filter>
@@ -23,12 +23,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ChooseAreaActivity"
+            android:name="com.canwdev.zephyr.ChooseAreaActivity"
             android:label="@string/select_area"
             android:theme="@style/Theme.AppCompat.Light.Dialog"></activity>
 
         <service
-            android:name=".service.UpdateWeatherService"
+            android:name="com.canwdev.zephyr.service.UpdateWeatherService"
             android:enabled="true"
             android:exported="true"></service>
     </application>

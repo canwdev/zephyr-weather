@@ -1,4 +1,4 @@
-package com.example.myweather.util;
+package com.canwdev.zephyr.util;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

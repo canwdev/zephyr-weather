@@ -1,4 +1,4 @@
-package com.example.myweather;
+package com.canwdev.zephyr;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -15,12 +15,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.myweather.db.City;
-import com.example.myweather.db.County;
-import com.example.myweather.db.Province;
-import com.example.myweather.util.Conf;
-import com.example.myweather.util.HttpUtil;
-import com.example.myweather.util.Utility;
+import com.canwdev.zephyr.db.City;
+import com.canwdev.zephyr.db.County;
+import com.canwdev.zephyr.db.Province;
+import com.canwdev.zephyr.util.Conf;
+import com.canwdev.zephyr.util.HttpUtil;
+import com.canwdev.zephyr.util.Utility;
 
 import org.litepal.crud.DataSupport;
 

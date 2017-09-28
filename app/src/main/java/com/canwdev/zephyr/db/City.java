@@ -1,4 +1,4 @@
-package com.example.myweather.db;
+package com.canwdev.zephyr.db;
 
 
 import org.litepal.crud.DataSupport;

@@ -1,4 +1,4 @@
-package com.example.myweather;
+package com.canwdev.zephyr;
 
 import org.junit.Test;
 

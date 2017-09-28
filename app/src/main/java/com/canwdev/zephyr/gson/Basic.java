@@ -1,4 +1,4 @@
-package com.example.myweather.gson;
+package com.canwdev.zephyr.gson;
 
 import com.google.gson.annotations.SerializedName;
 

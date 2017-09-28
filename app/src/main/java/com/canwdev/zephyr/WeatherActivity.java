@@ -1,4 +1,4 @@
-package com.example.myweather;
+package com.canwdev.zephyr;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,12 +23,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.myweather.gson.Forecast;
-import com.example.myweather.gson.Weather;
-import com.example.myweather.service.UpdateWeatherService;
-import com.example.myweather.util.Conf;
-import com.example.myweather.util.HttpUtil;
-import com.example.myweather.util.Utility;
+import com.canwdev.zephyr.gson.Forecast;
+import com.canwdev.zephyr.gson.Weather;
+import com.canwdev.zephyr.service.UpdateWeatherService;
+import com.canwdev.zephyr.util.Conf;
+import com.canwdev.zephyr.util.HttpUtil;
+import com.canwdev.zephyr.util.Utility;
 
 import java.io.IOException;
 

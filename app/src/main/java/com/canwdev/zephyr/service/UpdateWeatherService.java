@@ -1,4 +1,4 @@
-package com.example.myweather.service;
+package com.canwdev.zephyr.service;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -7,14 +7,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.example.myweather.WeatherActivity;
-import com.example.myweather.gson.Weather;
-import com.example.myweather.util.Conf;
-import com.example.myweather.util.HttpUtil;
-import com.example.myweather.util.Utility;
+import com.canwdev.zephyr.WeatherActivity;
+import com.canwdev.zephyr.gson.Weather;
+import com.canwdev.zephyr.util.Conf;
+import com.canwdev.zephyr.util.HttpUtil;
+import com.canwdev.zephyr.util.Utility;
 
 import java.io.IOException;
 

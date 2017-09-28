@@ -1,4 +1,4 @@
-package com.example.myweather.util;
+package com.canwdev.zephyr.util;
 
 public class Conf {
     public static final String PREF_FILE_NAME = "all_settings";

@@ -1,32 +1,17 @@
-package com.example.myweather.util;
+package com.canwdev.zephyr.util;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.example.myweather.WeatherActivity;
-import com.example.myweather.db.City;
-import com.example.myweather.db.County;
-import com.example.myweather.db.Province;
-import com.example.myweather.gson.Weather;
+import com.canwdev.zephyr.db.City;
+import com.canwdev.zephyr.db.County;
+import com.canwdev.zephyr.db.Province;
+import com.canwdev.zephyr.gson.Weather;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
-
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class Utility {
 
