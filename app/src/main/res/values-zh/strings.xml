@@ -39,4 +39,7 @@
     <string name="settings_enable_update_service">启用每小时后台更新天气</string>
     <string name="about_github">Github 查看源码</string>
     <string name="settings_clear_all">重置全部设置</string>
+    <string name="about_developer">canwdev</string>
+    <string name="share_with">分享</string>
+    <string name="pm_2_5">PM2.5</string>
 </resources>

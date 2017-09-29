@@ -11,12 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.canwdev.zephyr.util.Conf;
-
-import org.w3c.dom.Text;
 
 public class AboutActivity extends AppCompatActivity {
 
@@ -43,7 +40,7 @@ public class AboutActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        CardView cardView = (CardView) findViewById(R.id.card_about);
+        CardView cardView = (CardView) findViewById(R.id.CardView_about);
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_card_show);
         cardView.startAnimation(animation);
     }
