@@ -32,16 +32,24 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:fitsSystemWindows="true"
                     android:orientation="vertical">
 
                     <include layout="@layout/frag_weather_title" />
+
                     <include layout="@layout/frag_weather_now" />
+
                     <include layout="@layout/frag_weather_now_detial" />
+
                     <include layout="@layout/frag_weather_hourly_forecast" />
+
                     <include layout="@layout/frag_weather_daily_forecast" />
+
                     <include layout="@layout/frag_weather_aqi" />
+
                     <include layout="@layout/frag_weather_suggestion" />
                 </LinearLayout>
             </ScrollView>

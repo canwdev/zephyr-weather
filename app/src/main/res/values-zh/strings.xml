@@ -14,7 +14,7 @@
     <string name="suggestion">生活建议</string>
     <string name="tools">工具</string>
     <string name="air_quality">空气质量</string>
-    <string name="about">关于</string>
+    <string name="activity_about">关于</string>
     <string name="windforce">风力</string>
     <string name="weather_info">天气</string>
     <string name="visibility">能见度</string>
@@ -37,4 +37,5 @@
     <string name="settings_custom_api_key">自定义 API KEY</string>
     <string name="settings_enable_background_image">启用 Bing 每日一图</string>
     <string name="settings_enable_update_service">启用每小时后台更新天气</string>
+    <string name="about_github">Github 查看源码</string>
 </resources>

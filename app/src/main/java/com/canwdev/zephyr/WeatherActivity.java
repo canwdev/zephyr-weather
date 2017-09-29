@@ -187,9 +187,8 @@ public class WeatherActivity extends AppCompatActivity {
                         }
                         break;
                     case R.id.drawer_item_github:
-                        Intent iGoGithub = new Intent(Intent.ACTION_VIEW);
-                        iGoGithub.setData(Uri.parse(Conf.GITHUB_ADDRESS));
-                        startActivity(iGoGithub);
+                        Intent iGoAbout = new Intent(WeatherActivity.this, AboutActivity.class);
+                        startActivity(iGoAbout);
                         break;
                     default:
                         break;
@@ -394,22 +393,27 @@ public class WeatherActivity extends AppCompatActivity {
             dailyForecastLayout.addView(view);
         }
         // 解析AQI指数
-        CardView LinearLayoutAqi = (CardView) findViewById(R.id.CardView_aqi);
+        CardView cardViewAqi = (CardView) findViewById(R.id.CardView_aqi);
         if (weather.aqi != null) {
             aqiText.setText(weather.aqi.city.aqi);
             pm25Text.setText(weather.aqi.city.pm25);
-            LinearLayoutAqi.setVisibility(View.VISIBLE);
+            cardViewAqi.setVisibility(View.VISIBLE);
         } else {
-            LinearLayoutAqi.setVisibility(View.GONE);
+            cardViewAqi.setVisibility(View.GONE);
         }
-
-        comfortText.setText("[" + weather.suggestion.comfort.title + "] " + weather.suggestion.comfort.info);
-        carWashText.setText("[" + weather.suggestion.carWash.title + "] " + weather.suggestion.carWash.info);
-        wearingText.setText("[" + weather.suggestion.wearing.title + "] " + weather.suggestion.wearing.info);
-        influenzaText.setText("[" + weather.suggestion.influenza.title + "] " + weather.suggestion.influenza.info);
-        sportText.setText("[" + weather.suggestion.sport.title + "] " + weather.suggestion.sport.info);
-        travelText.setText("[" + weather.suggestion.travel.title + "] " + weather.suggestion.travel.info);
-        uvText.setText("[" + weather.suggestion.uv.title + "] " + weather.suggestion.uv.info);
+        // 解析生活建议
+        CardView cardViewSuggestion = (CardView) findViewById(R.id.CardViewSuggestion);
+        if (weather.suggestion != null) {
+            comfortText.setText("[" + weather.suggestion.comfort.title + "] " + weather.suggestion.comfort.info);
+            carWashText.setText("[" + weather.suggestion.carWash.title + "] " + weather.suggestion.carWash.info);
+            wearingText.setText("[" + weather.suggestion.wearing.title + "] " + weather.suggestion.wearing.info);
+            influenzaText.setText("[" + weather.suggestion.influenza.title + "] " + weather.suggestion.influenza.info);
+            sportText.setText("[" + weather.suggestion.sport.title + "] " + weather.suggestion.sport.info);
+            travelText.setText("[" + weather.suggestion.travel.title + "] " + weather.suggestion.travel.info);
+            uvText.setText("[" + weather.suggestion.uv.title + "] " + weather.suggestion.uv.info);
+        } else {
+            cardViewSuggestion.setVisibility(View.GONE);
+        }
 
         weatherScrollView.setVisibility(View.VISIBLE);
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_card_show);
