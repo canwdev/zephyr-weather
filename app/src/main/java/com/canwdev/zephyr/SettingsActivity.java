@@ -22,6 +22,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     Switch serviceSwitch;
     Switch backgroundSwitch;
+    private boolean doNotSave = false;
 
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
@@ -129,9 +130,30 @@ public class SettingsActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    public void button_clearAllSettings(View view) {
+
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this)
+                .setTitle(getResources().getString(R.string.settings_clear_all)+"?")
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        editor.clear();
+                        editor.apply();
+                        doNotSave = true;
+                        finish();
+                    }
+                });
+        dialog.show();
+    }
+
     @Override
     protected void onDestroy() {
-        saveSettings();
+        if (doNotSave) {
+
+        } else {
+            saveSettings();
+        }
         super.onDestroy();
     }
 

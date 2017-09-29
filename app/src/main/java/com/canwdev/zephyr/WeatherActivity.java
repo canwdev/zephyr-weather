@@ -415,9 +415,9 @@ public class WeatherActivity extends AppCompatActivity {
             cardViewSuggestion.setVisibility(View.GONE);
         }
 
-        weatherScrollView.setVisibility(View.VISIBLE);
+        /*weatherScrollView.setVisibility(View.VISIBLE);
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_card_show);
-        weatherScrollView.startAnimation(animation);
+        weatherScrollView.startAnimation(animation);*/
 
         if (pref.getBoolean(Conf.PREF_ENABLE_SERVICE, false)) {
             // 启动后台天气自动更新服务
