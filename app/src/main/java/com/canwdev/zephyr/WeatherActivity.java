@@ -41,6 +41,9 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class WeatherActivity extends AppCompatActivity {
+    public final static int INTENT_CHOOSE_AREA = 1;
+    // public final static int INTENT_RECENT_AREA = 2;
+
     public static final String WEATHER_API_URL = "https://free-api.heweather.com/v5/weather?";
     private static final String TAG = "WeatherActivity!!";
     private SharedPreferences pref;
@@ -165,10 +168,14 @@ public class WeatherActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
+                    case R.id.drawer_item_recentArea:
+                        Intent iRecentArea = new Intent(WeatherActivity.this, RecentAreaActivity.class);
+                        startActivityForResult(iRecentArea, INTENT_CHOOSE_AREA);
+                        break;
                     case R.id.drawer_item_setArea:
                         Intent iSetArea = new Intent(WeatherActivity.this, ChooseAreaActivity.class);
                         // 去选择地区
-                        startActivityForResult(iSetArea, 1);
+                        startActivityForResult(iSetArea, INTENT_CHOOSE_AREA);
                         break;
                     case R.id.drawer_item_settings:
                         Intent iGoSetting = new Intent(WeatherActivity.this, SettingsActivity.class);
@@ -268,7 +275,7 @@ public class WeatherActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case 1:
+            case INTENT_CHOOSE_AREA:
                 if (resultCode == RESULT_OK) {
                     // 接收更改地区的 Intent 返回值
                     String rCityWeatherId = "city=" + data.getStringExtra("city_weather_id");
@@ -378,7 +385,7 @@ public class WeatherActivity extends AppCompatActivity {
         // 解析几小时预报
         CardView cardViewHourly = (CardView) findViewById(R.id.CardView_hourly);
         hourlyForecastLayout.removeAllViews();
-        if (weather.hourlyForecastList != null) {
+        if (weather.hourlyForecastList.size() >= 1) {
             cardViewHourly.setVisibility(View.VISIBLE);
             for (HourlyForecast hourlyForecast : weather.hourlyForecastList) {
                 View view = LayoutInflater.from(this)

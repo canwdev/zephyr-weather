@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.canwdev.zephyr.db.City;
 import com.canwdev.zephyr.db.County;
 import com.canwdev.zephyr.db.Province;
+import com.canwdev.zephyr.db.RecentArea;
 import com.canwdev.zephyr.gson.Weather;
 import com.google.gson.Gson;
 
@@ -19,7 +20,7 @@ public class Utility {
     public static boolean handleProvinceResponse(String response) {
         if (!TextUtils.isEmpty(response)) {
             try {
-                DataSupport.deleteAll(Province.class);
+                //DataSupport.deleteAll(Province.class);
 
                 JSONArray allProvinces = new JSONArray(response);
                 for (int i = 0; i < allProvinces.length(); i++) {
@@ -41,7 +42,7 @@ public class Utility {
     public static boolean handleCityResponse(String response, int provinceId) {
         if (!TextUtils.isEmpty(response)) {
             try {
-                DataSupport.deleteAll(City.class);
+                //DataSupport.deleteAll(City.class);
                 JSONArray allCities = new JSONArray(response);
                 for (int i = 0; i < allCities.length(); i++) {
                     JSONObject cityObjcet = allCities.getJSONObject(i);
@@ -63,7 +64,7 @@ public class Utility {
     public static boolean handleCountyResponse(String response, int cityId) {
         if (!TextUtils.isEmpty(response)) {
             try {
-                DataSupport.deleteAll(County.class);
+                //DataSupport.deleteAll(County.class);
                 JSONArray allCounties = new JSONArray(response);
                 for (int i = 0; i < allCounties.length(); i++) {
                     JSONObject countyObject = allCounties.getJSONObject(i);
@@ -93,5 +94,13 @@ public class Utility {
             e.printStackTrace();
         }
         return null;
+    }
+
+    // 记录历史地区列表
+    public static void recordRecentArea(String weatherId, String areaName) {
+        RecentArea recentArea = new RecentArea();
+        recentArea.setWeatherId(weatherId);
+        recentArea.setAreaName(areaName);
+        recentArea.save();
     }
 }

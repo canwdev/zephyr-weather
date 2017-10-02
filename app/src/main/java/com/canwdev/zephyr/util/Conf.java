@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 public class Conf {
     public static final String PREF_FILE_NAME = "all_settings";
-    public static final String PREF_COUNTY_NAME = "countyName";
+    public static final String PREF_AREA_NAME = "countyName";
     public static final String PREF_WEATHER_ID = "weatherId";
     public static final String PREF_API_KEY = "apiKey";
     public static final String PREF_BG_URL = "bgUrl";

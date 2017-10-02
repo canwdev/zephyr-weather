@@ -29,7 +29,7 @@
     <string name="weather_info">Weather</string>
     <string name="pressure">Pressure</string>
     <string name="hourlyForecast">Hourly Forcast</string>
-    <string name="precipitation_probability">Precipitation probability</string>
+    <string name="precipitation_probability">Precipitation probability↓</string>
     <string name="uv">UV</string>
     <string name="travel">Travel</string>
     <string name="cold">Cold</string>

@@ -3,12 +3,13 @@
     <!--数据库名-->
     <dbname value="Weather" />
     <!--数据库版本-->
-    <version value="1" />
+    <version value="3" />
     <!--配置要映射（对象关系映射ORM）的模型类-->
     <list>
         <mapping class="com.canwdev.zephyr.db.Province"></mapping>
         <mapping class="com.canwdev.zephyr.db.City"></mapping>
         <mapping class="com.canwdev.zephyr.db.County"></mapping>
+        <mapping class="com.canwdev.zephyr.db.RecentArea"></mapping>
     </list>
 
 </litepal>

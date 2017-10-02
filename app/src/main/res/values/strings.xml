@@ -24,11 +24,11 @@
     <string name="felling">体感温度</string>
     <string name="direction">风向</string>
     <string name="now_detail">实况天气</string>
-    <string name="degree">风向 360°</string>
+    <string name="degree">360°风向</string>
     <string name="humidity">相对湿度</string>
     <string name="pressure">气压</string>
     <string name="hourlyForecast">未来每小时预报</string>
-    <string name="precipitation_probability">降水概率</string>
+    <string name="precipitation_probability">降水概率↓</string>
     <string name="cold">感冒指数</string>
     <string name="travel">旅游指数</string>
     <string name="uv">紫外线指数</string>
@@ -43,4 +43,6 @@
     <string name="share_with">分享</string>
     <string name="pm_2_5">PM2.5</string>
     <string name="about_info">一个简单的 Android 天气应用，使用和风天气v5接口。</string>
+    <string name="recent_area">常用地区</string>
+    <string name="no_recent_area">还没有选择过地区</string>
 </resources>

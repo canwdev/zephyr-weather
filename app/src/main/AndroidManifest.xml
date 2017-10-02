@@ -25,7 +25,7 @@
         <activity
             android:name=".ChooseAreaActivity"
             android:label="@string/settings_select_area"
-            android:theme="@style/Dialog" />
+            android:theme="@style/DialogNoTitle" />
 
         <service
             android:name=".service.UpdateWeatherService"
@@ -35,8 +35,13 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/settings" />
-        <activity android:name=".AboutActivity"
-            android:label="@string/activity_about"></activity>
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/activity_about" />
+        <activity
+            android:name=".RecentAreaActivity"
+            android:theme="@style/Dialog"
+            android:label="@string/recent_area"></activity>
     </application>
 
 </manifest>

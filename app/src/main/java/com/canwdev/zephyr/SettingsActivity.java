@@ -17,6 +17,7 @@ import android.widget.ScrollView;
 import android.widget.Switch;
 
 import com.canwdev.zephyr.util.Conf;
+import com.canwdev.zephyr.util.Utility;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -88,6 +89,7 @@ public class SettingsActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         final String newWeatherId = editText.getText().toString();
                         if (!newWeatherId.isEmpty()) {
+                            Utility.recordRecentArea(newWeatherId, "");
                             editor.putString(Conf.PREF_WEATHER_ID, newWeatherId);
                             editor.apply();
                         }

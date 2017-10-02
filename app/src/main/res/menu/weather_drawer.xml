@@ -3,6 +3,10 @@
 
     <group android:checkableBehavior="none">
         <item
+            android:id="@+id/drawer_item_recentArea"
+            android:icon="@drawable/ic_history_black_24dp"
+            android:title="@string/recent_area" />
+        <item
             android:id="@+id/drawer_item_setArea"
             android:icon="@drawable/ic_edit_location_black_24dp"
             android:title="@string/area_settings" />

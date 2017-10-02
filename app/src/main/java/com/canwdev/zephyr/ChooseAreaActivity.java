@@ -86,9 +86,11 @@ public class ChooseAreaActivity extends AppCompatActivity {
                     queryCounties();
                 } else if (currentLevel == LEVEL_COUNTY) {
                     String weatherId = countyList.get(i).getWeatherId();
+                    String areaName = countyList.get(i).getCountyName();
                     // 保存设置
+                    Utility.recordRecentArea(weatherId, areaName);
                     SharedPreferences.Editor editor = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE).edit();
-                    editor.putString(Conf.PREF_COUNTY_NAME, countyList.get(i).getCountyName());
+                    editor.putString(Conf.PREF_AREA_NAME, areaName);
                     editor.putString(Conf.PREF_WEATHER_ID, weatherId);
                     editor.apply();
                     //Toast.makeText(getContext(), "set: "+weatherId, Toast.LENGTH_SHORT).show();
