@@ -14,7 +14,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
+import java.util.List;
+
 public class Utility {
+
+    private static final String TAG = "Utility!!";
 
     // 解析JSON的省级数据，保存到数据库
     public static boolean handleProvinceResponse(String response) {
@@ -98,9 +102,43 @@ public class Utility {
 
     // 记录历史地区列表
     public static void recordRecentArea(String weatherId, String areaName) {
-        RecentArea recentArea = new RecentArea();
-        recentArea.setWeatherId(weatherId);
-        recentArea.setAreaName(areaName);
-        recentArea.save();
+        final int historyCount = 5;
+        final List<RecentArea> dbWeatherId = DataSupport.where("weatherid = ?", weatherId).find(RecentArea.class);
+
+        // 如果已存在
+        if (dbWeatherId.size() > 0) {
+            final String lastWeatherId = dbWeatherId.get(0).getWeatherId();
+            if (weatherId.equals(lastWeatherId)) {
+                // 删除重复，并将最新选择的置顶
+                List<RecentArea> recentAreaList = DataSupport.findAll(RecentArea.class);
+                for (RecentArea area : recentAreaList) {
+                    if (area.getWeatherId().equals(weatherId)) {
+                        DataSupport.delete(RecentArea.class, area.getId());
+                    }
+                }
+                if (recentAreaList.size() > historyCount) {
+                    for (int i = 0; i <= recentAreaList.size() - historyCount; i++) {
+                        DataSupport.delete(RecentArea.class, recentAreaList.get(i).getId());
+                    }
+                }
+                RecentArea recentArea = new RecentArea();
+                recentArea.setWeatherId(weatherId);
+                recentArea.setAreaName(areaName);
+                recentArea.save();
+            }
+
+        } else {
+            // 删除多余历史
+            List<RecentArea> recentAreaList = DataSupport.findAll(RecentArea.class);
+            for (int i = 0; i <= recentAreaList.size() - historyCount; i++) {
+                DataSupport.delete(RecentArea.class, recentAreaList.get(i).getId());
+            }
+            RecentArea recentArea = new RecentArea();
+            recentArea.setWeatherId(weatherId);
+            recentArea.setAreaName(areaName);
+            recentArea.save();
+        }
+
+
     }
 }

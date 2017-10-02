@@ -16,8 +16,14 @@ import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.Switch;
 
+import com.canwdev.zephyr.db.City;
+import com.canwdev.zephyr.db.County;
+import com.canwdev.zephyr.db.Province;
+import com.canwdev.zephyr.db.RecentArea;
 import com.canwdev.zephyr.util.Conf;
 import com.canwdev.zephyr.util.Utility;
+
+import org.litepal.crud.DataSupport;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -75,7 +81,7 @@ public class SettingsActivity extends AppCompatActivity {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this)
                 .setTitle(getResources().getString(R.string.settings_custom_area_code))
                 .setView(editText)
-                .setNeutralButton("LIST", new DialogInterface.OnClickListener() {
+                .setNeutralButton(getResources().getString(R.string.area_list_code), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -100,12 +106,12 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void button_customKey(View view) {
         final EditText editText = new EditText(this);
-        editText.setHint("<API Key>");
+        editText.setHint(getResources().getString(R.string.api_key));
         editText.setText(pref.getString(Conf.PREF_API_KEY, null));
         AlertDialog.Builder dialog = new AlertDialog.Builder(this)
                 .setTitle(getResources().getString(R.string.settings_custom_api_key))
                 .setView(editText)
-                .setNeutralButton("Register", new DialogInterface.OnClickListener() {
+                .setNeutralButton(getResources().getString(R.string.button_register), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -113,7 +119,7 @@ public class SettingsActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 })
-                .setNegativeButton("Reset", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.button_reset), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         editor.putString(Conf.PREF_API_KEY, null);
@@ -143,6 +149,10 @@ public class SettingsActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         editor.clear();
                         editor.apply();
+                        DataSupport.deleteAll(Province.class);
+                        DataSupport.deleteAll(City.class);
+                        DataSupport.deleteAll(County.class);
+                        DataSupport.deleteAll(RecentArea.class);
                         doNotSave = true;
                         finish();
                     }

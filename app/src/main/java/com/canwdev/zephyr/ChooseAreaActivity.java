@@ -171,7 +171,7 @@ public class ChooseAreaActivity extends AppCompatActivity {
         if (countyList.size() > 0) {
             dataList.clear();
             for (County county : countyList) {
-                dataList.add("[" + county.getWeatherId() + "]  " + county.getCountyName());
+                dataList.add(county.getCountyName()+ "  [" + county.getWeatherId() + "]");
             }
             adapter.notifyDataSetChanged();
             listView.setSelection(0);

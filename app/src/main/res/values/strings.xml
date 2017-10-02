@@ -45,4 +45,8 @@
     <string name="about_info">一个简单的 Android 天气应用，使用和风天气v5接口。</string>
     <string name="recent_area">常用地区</string>
     <string name="no_recent_area">还没有选择过地区</string>
+    <string name="area_list_code">地区列表...</string>
+    <string name="api_key">API KEY</string>
+    <string name="button_register">注册...</string>
+    <string name="button_reset">重置</string>
 </resources>

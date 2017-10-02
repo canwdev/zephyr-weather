@@ -12,10 +12,12 @@ import android.widget.Toast;
 
 import com.canwdev.zephyr.db.RecentArea;
 import com.canwdev.zephyr.util.Conf;
+import com.canwdev.zephyr.util.Utility;
 
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class RecentAreaActivity extends AppCompatActivity {
@@ -37,11 +39,12 @@ public class RecentAreaActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String cityName = recentAreaList.get(i).getAreaName();
+                String areaName = recentAreaList.get(i).getAreaName();
                 String weatherId = recentAreaList.get(i).getWeatherId();
                 // 保存设置
+                Utility.recordRecentArea(weatherId, areaName);
                 SharedPreferences.Editor editor = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE).edit();
-                editor.putString(Conf.PREF_AREA_NAME, cityName);
+                editor.putString(Conf.PREF_AREA_NAME, areaName);
                 editor.putString(Conf.PREF_WEATHER_ID, weatherId);
                 editor.apply();
 
@@ -59,11 +62,14 @@ public class RecentAreaActivity extends AppCompatActivity {
         recentAreaList = DataSupport.findAll(RecentArea.class);
         if (recentAreaList.size() > 0) {
             dataList.clear();
-            for (RecentArea recentArea : recentAreaList) {
-                dataList.add("[" + recentArea.getWeatherId() + "]  " + recentArea.getAreaName());
+            // 倒序输出
+            for (RecentArea recentArea: recentAreaList) {
+                dataList.add(0, recentArea.getAreaName()+"  [" + recentArea.getWeatherId() + "]");
                 adapter.notifyDataSetChanged();
                 listView.setSelection(0);
             }
+            Collections.reverse(recentAreaList);
+
         } else {
             Toast.makeText(this, getResources().getString(R.string.no_recent_area), Toast.LENGTH_SHORT).show();
             finish();

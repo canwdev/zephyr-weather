@@ -42,4 +42,10 @@
     <string name="about_developer">canwdev</string>
     <string name="settings_clear_all">Reset all settings</string>
     <string name="about_info">A simple Android weather app using the heweather API v5.</string>
+    <string name="button_register">Register...</string>
+    <string name="button_reset">Reset</string>
+    <string name="api_key">API KEY</string>
+    <string name="area_list_code">Area List...</string>
+    <string name="no_recent_area">No recent area yet</string>
+    <string name="recent_area">Recent Area</string>
 </resources>
