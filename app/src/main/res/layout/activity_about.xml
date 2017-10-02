@@ -73,6 +73,17 @@
                     app:srcCompat="@drawable/ic_cloud_circle_black_24dp" />
 
                 <TextView
+                    android:id="@+id/textView_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/text_margin"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/textView7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -98,12 +109,13 @@
                     app:srcCompat="@drawable/ic_info_black_24dp" />
 
                 <TextView
-                    android:id="@+id/textView_version"
+                    android:id="@+id/textView5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="@dimen/text_margin"
-                    android:text=""
+                    android:layout_weight="1"
+                    android:text="@string/about_info"
                     android:textStyle="italic" />
             </LinearLayout>
 

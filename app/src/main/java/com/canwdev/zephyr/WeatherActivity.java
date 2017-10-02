@@ -11,11 +11,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,14 +32,17 @@ import com.canwdev.zephyr.util.HttpUtil;
 import com.canwdev.zephyr.util.Utility;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
 public class WeatherActivity extends AppCompatActivity {
-
     public static final String WEATHER_API_URL = "https://free-api.heweather.com/v5/weather?";
+    private static final String TAG = "WeatherActivity!!";
     private SharedPreferences pref;
     private String apiKey;
     // public static final String WEATHER_API_URL_SAMPLE = WEATHER_API_URL + CITY_SAMPLE + apiKey;
@@ -208,19 +210,34 @@ public class WeatherActivity extends AppCompatActivity {
         apiKey = "&key=" + Conf.getKey(WeatherActivity.this);
         String setCityWeatherId = pref.getString(Conf.PREF_WEATHER_ID, null);
         String weatherCache = pref.getString(Conf.PREF_WEATHER_SAVE, null);
+        // 有缓存时直接解析天气数据
         if (weatherCache != null) {
-            // 有缓存时直接解析天气数据
             Weather weather = Utility.handleWeatherResponse(weatherCache);
-            // cityWeatherId = "city="+weather.basic.weatherId;
-
-            // 检查默认地区设置是否一致
+            // 检查城市id是否存在
             if (setCityWeatherId != null) {
                 cityWeatherId = "city=" + setCityWeatherId;
+                // 检查默认地区设置是否一致
                 if (!weather.basic.weatherId.equals(setCityWeatherId)) {
                     swipeRefresh.setRefreshing(true);
                     requestWeather(cityWeatherId);
                 } else {
-                    showWeatherInfo(weather);
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                    try {
+                        Date cachedUpdateTime = dateFormat.parse(weather.basic.update.updateTime);
+                        Date SystemTime = new Date();
+                        // 如果缓存时间与系统时间相差大于1小时，则更新
+                        long diff = SystemTime.getTime() - cachedUpdateTime.getTime();
+                        double hours = (double) diff / (1000 * 60 * 60);
+                        if (hours > 1) {
+                            swipeRefresh.setRefreshing(true);
+                            requestWeather(cityWeatherId);
+                        } else {
+                            showWeatherInfo(weather);
+                        }
+                    } catch (ParseException e) {
+                        Log.e(TAG, "ParseException: " + e.getMessage(), e);
+                        e.printStackTrace();
+                    }
                 }
             } else {
                 showWeatherInfo(weather);
