@@ -38,7 +38,8 @@ public class SettingsActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView1);
+        // 打开时的动画
+        ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView_settings);
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_card_show);
         scrollView.startAnimation(animation);
 

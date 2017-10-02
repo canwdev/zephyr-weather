@@ -88,14 +88,12 @@ public class WeatherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
-        // 适配透明状态
-        /*if (Build.VERSION.SDK_INT >= 21) {
-            View decorView = getWindow().getDecorView();
-            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
-        }*/
-        // 初始化各控件
+
+        initView();
+    }
+
+    // 初始化各控件与设置
+    private void initView() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.weather_drawer);
         buttonOpenDrawer = (ImageButton) findViewById(R.id.button_drawer);
         buttonShare = (ImageButton) findViewById(R.id.button_shareWeather);
@@ -150,7 +148,7 @@ public class WeatherActivity extends AppCompatActivity {
             }
         });
 
-        // 分享按钮
+        // 分享按钮动作
         buttonShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -163,7 +161,6 @@ public class WeatherActivity extends AppCompatActivity {
 
         // 设置抽屉内的点击事件
         final NavigationView navigation = (NavigationView) findViewById(R.id.weather_drawer_navigation);
-        // navigation.setCheckedItem(R.id.item_settings);
         navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -195,15 +192,13 @@ public class WeatherActivity extends AppCompatActivity {
                     default:
                         break;
                 }
-                //navigation.setCheckedItem(item.getItemId());
                 mDrawerLayout.closeDrawers();
                 return true;
             }
         });
-
-
     }
 
+    // 程序onStart时执行检查动作
     @Override
     protected void onStart() {
         super.onStart();
@@ -356,6 +351,7 @@ public class WeatherActivity extends AppCompatActivity {
         loadBgImage();
     }
 
+    // 根据 weather 对象更新 UI 天气显示
     private void showWeatherInfo(Weather weather) {
         titleCityText.setText(weather.basic.cityName);
         titleUpdateTimeText.setText(weather.basic.update.updateTime);
@@ -380,20 +376,27 @@ public class WeatherActivity extends AppCompatActivity {
         speedDetailText.setText(weather.now.wind.speed + "kmph");
         /* 天气详细信息结束 */
         // 解析几小时预报
+        CardView cardViewHourly = (CardView) findViewById(R.id.CardView_hourly);
         hourlyForecastLayout.removeAllViews();
-        for (HourlyForecast hourlyForecast : weather.hourlyForecastList) {
-            View view = LayoutInflater.from(this)
-                    .inflate(R.layout.frag_weather_hourly_forecast_item, hourlyForecastLayout, false);
-            TextView timeText = (TextView) view.findViewById(R.id.textView_hfTime);
-            TextView statusText = (TextView) view.findViewById(R.id.textView_hfStatus);
-            TextView tempe = (TextView) view.findViewById(R.id.textView_hfTempe);
-            TextView probability = (TextView) view.findViewById(R.id.textView_hfPop);
-            timeText.setText(hourlyForecast.date.split(" ")[1]);
-            statusText.setText(hourlyForecast.condition.info);
-            tempe.setText(hourlyForecast.temperature + "℃");
-            probability.setText(hourlyForecast.probability + "%");
-            hourlyForecastLayout.addView(view);
+        if (weather.hourlyForecastList != null) {
+            cardViewHourly.setVisibility(View.VISIBLE);
+            for (HourlyForecast hourlyForecast : weather.hourlyForecastList) {
+                View view = LayoutInflater.from(this)
+                        .inflate(R.layout.frag_weather_hourly_forecast_item, hourlyForecastLayout, false);
+                TextView timeText = (TextView) view.findViewById(R.id.textView_hfTime);
+                TextView statusText = (TextView) view.findViewById(R.id.textView_hfStatus);
+                TextView tempe = (TextView) view.findViewById(R.id.textView_hfTempe);
+                TextView probability = (TextView) view.findViewById(R.id.textView_hfPop);
+                timeText.setText(hourlyForecast.date.split(" ")[1]);
+                statusText.setText(hourlyForecast.condition.info);
+                tempe.setText(hourlyForecast.temperature + "℃");
+                probability.setText(hourlyForecast.probability + "%");
+                hourlyForecastLayout.addView(view);
+            }
+        } else {
+            cardViewHourly.setVisibility(View.GONE);
         }
+
         // 解析几天预报
         dailyForecastLayout.removeAllViews();
         for (DailyForecast dailyForecast : weather.dailyForecastList) {

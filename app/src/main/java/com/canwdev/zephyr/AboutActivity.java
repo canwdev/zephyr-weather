@@ -3,14 +3,14 @@ package com.canwdev.zephyr;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.canwdev.zephyr.util.Conf;
@@ -35,14 +35,15 @@ public class AboutActivity extends AppCompatActivity {
             String versionName = this.getPackageManager().getPackageInfo(pkName, 0).versionName;
             int versionCode = this.getPackageManager().getPackageInfo(pkName, 0).versionCode;
 
-            versionText.setText(pkName+"\n"+versionName);
+            versionText.setText(pkName + "\n" + versionName);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
 
-        CardView cardView = (CardView) findViewById(R.id.CardView_about);
+        // 打开时的动画
+        ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView_about);
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_card_show);
-        cardView.startAnimation(animation);
+        scrollView.startAnimation(animation);
     }
 
     public void card_goGithub(View view) {
