@@ -42,7 +42,6 @@ public class RecentAreaActivity extends AppCompatActivity {
                 String areaName = recentAreaList.get(i).getAreaName();
                 String weatherId = recentAreaList.get(i).getWeatherId();
                 // 保存设置
-                Utility.recordRecentArea(weatherId, areaName);
                 SharedPreferences.Editor editor = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE).edit();
                 editor.putString(Conf.PREF_AREA_NAME, areaName);
                 editor.putString(Conf.PREF_WEATHER_ID, weatherId);

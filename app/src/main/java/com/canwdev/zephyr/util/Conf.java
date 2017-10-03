@@ -13,6 +13,10 @@ public class Conf {
     public static final String PREF_ENABLE_SERVICE = "enableService";
     public static final String PREF_ENABLE_BG_IMAGE = "enableBgImage";
 
+    // 天气接口，示例：https://free-api.heweather.com/v5/weather?city=yourcity&key=yourkey
+    public static final String WEATHER_API_URL = "https://free-api.heweather.com/v5/weather?";
+    // 地区查询接口，示例：https://api.heweather.com/v5/search?city=yourcity&key=yourkey
+    public static final String HEWEATHER_SEARCH_AREA_API = "https://api.heweather.com/v5/search?";
     public static final String HEWEATHER_CITY_SAMPLE = "city=CN101010100";
     public static final String HEWEATHER_CITY_SAMPLE2 = "city=CN101240213";
     public static final String HEWEATHER_CHINA_CITY_LIST = "https://cdn.heweather.com/china-city-list.txt";

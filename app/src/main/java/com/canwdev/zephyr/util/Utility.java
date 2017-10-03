@@ -6,6 +6,7 @@ import com.canwdev.zephyr.db.City;
 import com.canwdev.zephyr.db.County;
 import com.canwdev.zephyr.db.Province;
 import com.canwdev.zephyr.db.RecentArea;
+import com.canwdev.zephyr.gson.SearchedArea;
 import com.canwdev.zephyr.gson.Weather;
 import com.google.gson.Gson;
 
@@ -140,5 +141,18 @@ public class Utility {
         }
 
 
+    }
+
+    // 解析查询地区
+    public static SearchedArea handleSearchAreaResponse(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather5");
+            String areaString = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(areaString, SearchedArea.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

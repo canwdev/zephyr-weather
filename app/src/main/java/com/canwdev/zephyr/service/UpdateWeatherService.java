@@ -48,7 +48,7 @@ public class UpdateWeatherService extends Service {
         SharedPreferences prefAllSettings = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE);
         String setCityWeatherId = "city=" + prefAllSettings.getString(Conf.PREF_WEATHER_ID, null);
         String apiKey = "&key=" + setCityWeatherId + Conf.getKey(this);
-        final String weatherUrl = WeatherActivity.WEATHER_API_URL + apiKey;
+        final String weatherUrl = Conf.WEATHER_API_URL + apiKey;
 
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
             @Override

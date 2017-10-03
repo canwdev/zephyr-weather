@@ -52,6 +52,19 @@ public class SettingsActivity extends AppCompatActivity {
 
         serviceSwitch = (Switch) findViewById(R.id.switch_enableBackgroundService);
         backgroundSwitch = (Switch) findViewById(R.id.switch_enableBgImage);
+        backgroundSwitch.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                String pictureUrl = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE).getString(Conf.PREF_BG_URL, null);
+                if (pictureUrl != null) {
+                    Uri uri = Uri.parse(pictureUrl);
+                    Intent downloadIntent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(downloadIntent);
+                }
+                return true;
+            }
+        });
+
 
         pref = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE);
         editor = pref.edit();
@@ -95,7 +108,6 @@ public class SettingsActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         final String newWeatherId = editText.getText().toString();
                         if (!newWeatherId.isEmpty()) {
-                            Utility.recordRecentArea(newWeatherId, "");
                             editor.putString(Conf.PREF_WEATHER_ID, newWeatherId);
                             editor.apply();
                         }

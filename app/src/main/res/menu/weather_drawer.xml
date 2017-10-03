@@ -17,7 +17,8 @@
         <item
             android:id="@+id/drawer_item_downImage"
             android:icon="@drawable/ic_file_download_black_24dp"
-            android:title="@string/download_image" />
+            android:title="@string/download_image"
+            android:visible="false" />
     </group>
 
 

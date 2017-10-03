@@ -2,7 +2,7 @@
     <string name="app_name">Zephyr Weather</string>
     <string name="settings_select_area">Select your area</string>
     <string name="settings">Settings</string>
-    <string name="data_source_intro">Data from heweather.com</string>
+    <string name="data_source_intro">Weather data from heweather.com</string>
     <string name="download_image">Download Image</string>
     <string name="area_settings">Set Area</string>
     <string name="suggestion">Suggestion</string>
@@ -48,4 +48,10 @@
     <string name="area_list_code">Area List...</string>
     <string name="no_recent_area">No recent area yet</string>
     <string name="recent_area">Recent Area</string>
+    <string name="search_area">Search Area</string>
+    <string name="search_area_failed">Search area failed</string>
+    <string name="search_area_input">Input area name</string>
+    <string name="search_area_result">Search Result</string>
+    <string name="get_area_list_failed">Get area list failed, please check your Internet connection</string>
+    <string name="loading">Loading...</string>
 </resources>

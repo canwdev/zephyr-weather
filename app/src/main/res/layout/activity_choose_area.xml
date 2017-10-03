@@ -33,7 +33,7 @@
             android:textStyle="bold" />
 
         <ImageButton
-            android:id="@+id/button_fca_hlep"
+            android:id="@+id/button_fca_custom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -41,7 +41,7 @@
             android:layout_centerVertical="true"
             android:background="?android:attr/selectableItemBackground"
             android:padding="20dp"
-            app:srcCompat="@drawable/ic_help_outline_black_24dp" />
+            app:srcCompat="@drawable/ic_searched_for_black_24dp" />
 
         <LinearLayout
             android:layout_width="match_parent"

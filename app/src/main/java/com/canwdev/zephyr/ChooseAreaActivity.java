@@ -1,15 +1,18 @@
 package com.canwdev.zephyr;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -18,9 +21,11 @@ import android.widget.Toast;
 import com.canwdev.zephyr.db.City;
 import com.canwdev.zephyr.db.County;
 import com.canwdev.zephyr.db.Province;
+import com.canwdev.zephyr.gson.SearchedArea;
 import com.canwdev.zephyr.util.Conf;
 import com.canwdev.zephyr.util.HttpUtil;
 import com.canwdev.zephyr.util.Utility;
+import com.google.gson.Gson;
 
 import org.litepal.crud.DataSupport;
 
@@ -39,12 +44,14 @@ public class ChooseAreaActivity extends AppCompatActivity {
     public static final int LEVEL_PROVINCE = 0;
     public static final int LEVEL_CITY = 1;
     public static final int LEVEL_COUNTY = 2;
+    public static final int LEVEL_SEARCH = 3;
+    private static final String TAG = "ChooseAreaActivity!!";
 
     // 各控件
     private ProgressDialog progressDialog;
     private TextView titleText;
     private ImageButton buttonBack;
-    private ImageButton buttonHelp;
+    private ImageButton buttonSearchArea;
     private ListView listView;
 
     // 数据
@@ -53,6 +60,8 @@ public class ChooseAreaActivity extends AppCompatActivity {
     private List<Province> provinceList;
     private List<City> cityList;
     private List<County> countyList;
+    private SearchedArea searchedArea;
+    private String toSearchAreaString;
 
     // 当前选择状态
     private Province selectedProvince;
@@ -68,7 +77,7 @@ public class ChooseAreaActivity extends AppCompatActivity {
 
         titleText = (TextView) findViewById(R.id.textView_fca_title);
         buttonBack = (ImageButton) findViewById(R.id.button_fca_back);
-        buttonHelp = (ImageButton) findViewById(R.id.button_fca_hlep);
+        buttonSearchArea = (ImageButton) findViewById(R.id.button_fca_custom);
         listView = (ListView) findViewById(R.id.listView_fca_area);
         adapter = new ArrayAdapter<String>(this
                 , android.R.layout.simple_list_item_1, dataList);
@@ -88,12 +97,21 @@ public class ChooseAreaActivity extends AppCompatActivity {
                     String weatherId = countyList.get(i).getWeatherId();
                     String areaName = countyList.get(i).getCountyName();
                     // 保存设置
-                    Utility.recordRecentArea(weatherId, areaName);
                     SharedPreferences.Editor editor = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE).edit();
                     editor.putString(Conf.PREF_AREA_NAME, areaName);
                     editor.putString(Conf.PREF_WEATHER_ID, weatherId);
                     editor.apply();
-                    //Toast.makeText(getContext(), "set: "+weatherId, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent();
+                    intent.putExtra("city_weather_id", weatherId);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } else if (currentLevel == LEVEL_SEARCH) {
+                    String weatherId = searchedArea.HeWeather5.get(i).basic.weatherId;
+                    String areaName = searchedArea.HeWeather5.get(i).basic.cityName;
+                    SharedPreferences.Editor editor = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE).edit();
+                    editor.putString(Conf.PREF_AREA_NAME, areaName);
+                    editor.putString(Conf.PREF_WEATHER_ID, weatherId);
+                    editor.apply();
                     Intent intent = new Intent();
                     intent.putExtra("city_weather_id", weatherId);
                     setResult(RESULT_OK, intent);
@@ -111,25 +129,82 @@ public class ChooseAreaActivity extends AppCompatActivity {
                     queryProvinces();
                 } else if (currentLevel == LEVEL_PROVINCE) {
                     finish();
+                } else if (currentLevel == LEVEL_SEARCH) {
+                    queryProvinces();
                 }
             }
         });
-        // help button
-        buttonHelp.setOnClickListener(new View.OnClickListener() {
+        // 搜索地区
+        buttonSearchArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(Conf.HEWEATHER_CITY_LIST));
-                startActivity(intent);
+                searchedArea = null;
+                SharedPreferences pref = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE);
+                final SharedPreferences.Editor editor = pref.edit();
+                final EditText editText = new EditText(ChooseAreaActivity.this);
+                editText.setHint(getString(R.string.search_area_input));
+                AlertDialog.Builder dialog = new AlertDialog.Builder(ChooseAreaActivity.this)
+                        .setTitle(getString(R.string.search_area))
+                        .setView(editText)
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                toSearchAreaString = editText.getText().toString();
+                                querySearchArea(toSearchAreaString);
+                            }
+                        });
+                dialog.show();
+            }
+        });
+
+        // 长按输入地区ID
+        buttonSearchArea.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                SharedPreferences pref = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE);
+                final SharedPreferences.Editor editor = pref.edit();
+                final EditText editText = new EditText(ChooseAreaActivity.this);
+                editText.setText(pref.getString(Conf.PREF_WEATHER_ID, null));
+                AlertDialog.Builder dialog = new AlertDialog.Builder(ChooseAreaActivity.this)
+                        .setTitle(getString(R.string.settings_custom_area_code))
+                        .setView(editText)
+                        .setNeutralButton(getResources().getString(R.string.area_list_code), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                intent.setData(Uri.parse(Conf.HEWEATHER_CITY_LIST));
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                final String weatherId = editText.getText().toString();
+                                if (!weatherId.isEmpty()) {
+                                    editor.putString(Conf.PREF_WEATHER_ID, weatherId);
+                                    editor.apply();
+                                    Intent intent = new Intent();
+                                    intent.putExtra("city_weather_id", weatherId);
+                                    setResult(RESULT_OK, intent);
+                                    finish();
+                                } else {
+                                    Toast.makeText(ChooseAreaActivity.this, getString(R.string.search_area_failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                dialog.show();
+                return true;
             }
         });
         // 开始加载数据
         queryProvinces();
     }
 
+    // 查询省份
     private void queryProvinces() {
-        titleText.setText("选择省");
-        // buttonBack.setVisibility(View.GONE);
+        titleText.setText(getString(R.string.settings_select_area));
         provinceList = DataSupport.findAll(Province.class);
         if (provinceList.size() > 0) {
             dataList.clear();
@@ -140,14 +215,13 @@ public class ChooseAreaActivity extends AppCompatActivity {
             listView.setSelection(0);
             currentLevel = LEVEL_PROVINCE;
         } else {
-            String address = AREA_API_URL;
-            queryFromServer(address, LEVEL_PROVINCE);
+            queryFromServer(AREA_API_URL, LEVEL_PROVINCE);
         }
     }
 
+    // 查询城市
     private void queryCities() {
         titleText.setText(selectedProvince.getProvinceName());
-        buttonBack.setVisibility(View.VISIBLE);
         cityList = DataSupport.where("provinceid = ?", String.valueOf(selectedProvince.getId())).find(City.class);
         if (cityList.size() > 0) {
             dataList.clear();
@@ -164,14 +238,14 @@ public class ChooseAreaActivity extends AppCompatActivity {
         }
     }
 
+    // 查询县（最终城市/地区）
     private void queryCounties() {
         titleText.setText(selectedCity.getCityName());
-        buttonBack.setVisibility(View.VISIBLE);
         countyList = DataSupport.where("cityid = ?", String.valueOf(selectedCity.getId())).find(County.class);
         if (countyList.size() > 0) {
             dataList.clear();
             for (County county : countyList) {
-                dataList.add(county.getCountyName()+ "  [" + county.getWeatherId() + "]");
+                dataList.add(county.getCountyName() + "  [" + county.getWeatherId() + "]");
             }
             adapter.notifyDataSetChanged();
             listView.setSelection(0);
@@ -184,9 +258,30 @@ public class ChooseAreaActivity extends AppCompatActivity {
         }
     }
 
-    private void queryFromServer(final String address, final int type) {
+    // 手动搜索地区
+    private void querySearchArea(String areaName) {
+        if (searchedArea != null) {
+            if ("ok".equals(searchedArea.HeWeather5.get(0).status)) {
+                titleText.setText(getString(R.string.search_area_result));
+                dataList.clear();
+                for (SearchedArea.More i : searchedArea.HeWeather5) {
+                    dataList.add(i.basic.countryName+"/"+i.basic.provinceName+"/"+i.basic.cityName + " [" + i.basic.weatherId + "]");
+                }
+                adapter.notifyDataSetChanged();
+                listView.setSelection(0);
+                currentLevel = LEVEL_SEARCH;
+            } else {
+                Toast.makeText(this, getString(R.string.search_area_failed), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            searchAreaFromServer(Conf.HEWEATHER_SEARCH_AREA_API + "city=" + areaName + "&key=" + Conf.getKey(ChooseAreaActivity.this));
+        }
+
+    }
+
+    private void queryFromServer(final String apiAddress, final int type) {
         showProgressDialog();
-        HttpUtil.sendOkHttpRequest(address, new Callback() {
+        HttpUtil.sendOkHttpRequest(apiAddress, new Callback() {
             // 服务器成功响应
             @Override
             public void onResponse(Call call, Response response) throws IOException {
@@ -236,18 +331,49 @@ public class ChooseAreaActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         closeProgressDialog();
-                        Toast.makeText(ChooseAreaActivity.this, "获取省市县列表失败\n" + address, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ChooseAreaActivity.this, getString(R.string.search_area_failed), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         });
     }
 
+    private void searchAreaFromServer(final String apiAddress) {
+        HttpUtil.sendOkHttpRequest(apiAddress, new Callback() {
+            // 服务器成功响应
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseText = response.body().string();
+                searchedArea = new Gson().fromJson(responseText, SearchedArea.class);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (searchedArea != null) {
+                            querySearchArea(toSearchAreaString);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // 切换到主线程以操作UI
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        searchedArea = null;
+                        closeProgressDialog();
+                        Toast.makeText(ChooseAreaActivity.this, getString(R.string.get_area_list_failed) + "\n" + apiAddress, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
 
     private void showProgressDialog() {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage("Loading...");
+            progressDialog.setMessage(getString(R.string.loading));
             progressDialog.setCanceledOnTouchOutside(false);
         }
         progressDialog.show();

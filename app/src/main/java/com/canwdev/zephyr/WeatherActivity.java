@@ -44,7 +44,6 @@ public class WeatherActivity extends AppCompatActivity {
     public final static int INTENT_CHOOSE_AREA = 1;
     // public final static int INTENT_RECENT_AREA = 2;
 
-    public static final String WEATHER_API_URL = "https://free-api.heweather.com/v5/weather?";
     private static final String TAG = "WeatherActivity!!";
     private SharedPreferences pref;
     private String apiKey;
@@ -161,6 +160,7 @@ public class WeatherActivity extends AppCompatActivity {
                 startActivity(Intent.createChooser(intent, getString(R.string.share_with)));
             }
         });
+
 
         // 设置抽屉内的点击事件
         final NavigationView navigation = (NavigationView) findViewById(R.id.weather_drawer_navigation);
@@ -317,8 +317,8 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
     // 更新天气，保存设置，更新界面
-    private void requestWeather(String weatherId) {
-        final String weatherUrl = WEATHER_API_URL + weatherId + apiKey;
+    private void requestWeather(final String weatherId) {
+        final String weatherUrl = Conf.WEATHER_API_URL + weatherId + apiKey;
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
@@ -332,6 +332,7 @@ public class WeatherActivity extends AppCompatActivity {
                             editor.putString(Conf.PREF_WEATHER_SAVE, responseText);
                             editor.apply();
                             showWeatherInfo(weather);
+                            Utility.recordRecentArea(weather.basic.weatherId, weather.basic.cityName);
                         }
                         if ("invalid key".equals(weather.status)) {
                             Toast.makeText(WeatherActivity.this, "invalid key", Toast.LENGTH_SHORT).show();
@@ -386,7 +387,6 @@ public class WeatherActivity extends AppCompatActivity {
         CardView cardViewHourly = (CardView) findViewById(R.id.CardView_hourly);
         hourlyForecastLayout.removeAllViews();
         if (weather.hourlyForecastList.size() >= 1) {
-            cardViewHourly.setVisibility(View.VISIBLE);
             for (HourlyForecast hourlyForecast : weather.hourlyForecastList) {
                 View view = LayoutInflater.from(this)
                         .inflate(R.layout.frag_weather_hourly_forecast_item, hourlyForecastLayout, false);
@@ -400,6 +400,7 @@ public class WeatherActivity extends AppCompatActivity {
                 probability.setText(hourlyForecast.probability + "%");
                 hourlyForecastLayout.addView(view);
             }
+            cardViewHourly.setVisibility(View.VISIBLE);
         } else {
             cardViewHourly.setVisibility(View.GONE);
         }
@@ -438,13 +439,10 @@ public class WeatherActivity extends AppCompatActivity {
             sportText.setText("[" + weather.suggestion.sport.title + "] " + weather.suggestion.sport.info);
             travelText.setText("[" + weather.suggestion.travel.title + "] " + weather.suggestion.travel.info);
             uvText.setText("[" + weather.suggestion.uv.title + "] " + weather.suggestion.uv.info);
+            cardViewSuggestion.setVisibility(View.VISIBLE);
         } else {
             cardViewSuggestion.setVisibility(View.GONE);
         }
-
-        /*weatherScrollView.setVisibility(View.VISIBLE);
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_card_show);
-        weatherScrollView.startAnimation(animation);*/
 
         if (pref.getBoolean(Conf.PREF_ENABLE_SERVICE, false)) {
             // 启动后台天气自动更新服务
