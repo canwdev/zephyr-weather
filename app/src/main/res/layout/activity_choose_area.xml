@@ -28,7 +28,7 @@
             android:layout_centerVertical="true"
             android:text="TextView"
             android:textAlignment="center"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@android:color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -47,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/cardview_shadow_start_color"
             android:orientation="vertical"></LinearLayout>
     </RelativeLayout>
 

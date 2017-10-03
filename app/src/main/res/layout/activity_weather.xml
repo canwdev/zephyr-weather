@@ -42,7 +42,7 @@
 
                     <include layout="@layout/frag_weather_now" />
 
-                    <include layout="@layout/frag_weather_now_detial" />
+                    <include layout="@layout/frag_weather_now_detail" />
 
                     <include layout="@layout/frag_weather_hourly_forecast" />
 

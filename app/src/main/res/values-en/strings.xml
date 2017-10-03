@@ -15,7 +15,7 @@
     <string name="tools">Tools</string>
     <string name="activity_about">About</string>
     <string name="about_github">Source code on Github</string>
-    <string name="now_detail">Now Detail</string>
+    <string name="now_detail">Now Weather</string>
     <string name="temperature">Temperature</string>
     <string name="felling">Felling temperature</string>
     <string name="humidity">Humidity</string>

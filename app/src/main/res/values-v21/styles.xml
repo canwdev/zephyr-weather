@@ -14,15 +14,21 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-
     </style>
 
-    <style name="DialogNoTitle" parent="Theme.AppCompat.Light.Dialog">
+    <style name="Settings" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
+    <style name="DialogNoTitle1" parent="Theme.AppCompat.Light.Dialog">
         <item name="windowNoTitle">true</item>
         <item name="android:windowCloseOnTouchOutside">false</item><!-- activity点击空白部分不消失 -->
     </style>
 
-    <style name="Dialog" parent="Theme.AppCompat.Light.Dialog">
+    <style name="DialogNoTitle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="windowNoTitle">true</item>
     </style>
 
 

@@ -2,6 +2,7 @@ package com.canwdev.zephyr;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.canwdev.zephyr.gson.DailyForecast;
@@ -32,6 +32,8 @@ import com.canwdev.zephyr.util.Conf;
 import com.canwdev.zephyr.util.HttpUtil;
 import com.canwdev.zephyr.util.Utility;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -62,6 +64,7 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView temperatureText;
     private TextView weatherStatusText;
     /* 天气详细信息开始 */
+    private TextView nowDetailTitleText;
     private TextView temperatureDetailText;
     private TextView infoDetailText;
     private TextView fellingDetailText;
@@ -109,6 +112,7 @@ public class WeatherActivity extends AppCompatActivity {
         temperatureText = (TextView) findViewById(R.id.textView_tDegree);
         weatherStatusText = (TextView) findViewById(R.id.textView_tStatus);
         /* 天气详细信息开始 */
+        nowDetailTitleText = (TextView) findViewById(R.id.textView_nowDetailTitle);
         temperatureDetailText = (TextView) findViewById(R.id.temperature);
         infoDetailText = (TextView) findViewById(R.id.info);
         fellingDetailText = (TextView) findViewById(R.id.felling);
@@ -155,10 +159,7 @@ public class WeatherActivity extends AppCompatActivity {
         buttonShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.putExtra(Intent.EXTRA_TEXT, shareWeatherText);
-                intent.setType("text/plain");
-                startActivity(Intent.createChooser(intent, getString(R.string.share_with)));
+                shareWeather();
             }
         });
 
@@ -204,6 +205,42 @@ public class WeatherActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    // 分享
+    private void shareWeather() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+
+        // 分享天气详细信息截图
+        CardView CardView_nowDetail = (CardView) findViewById(R.id.CardView_nowDetail);
+        CardView_nowDetail.setDrawingCacheEnabled(true);
+        Bitmap bitmap = CardView_nowDetail.getDrawingCache();
+        bitmap = bitmap.createBitmap(bitmap);
+        CardView_nowDetail.setDrawingCacheEnabled(false);
+        if (bitmap != null) {
+            final File f = new File(getExternalCacheDir(), "img_cache.png");
+            if (f.exists()) {
+                f.delete();
+                try {
+                    FileOutputStream out = new FileOutputStream(f);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+                    out.flush();
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Uri u = Uri.fromFile(f);
+                intent.putExtra(Intent.EXTRA_STREAM, u);
+                intent.setType("image/jpeg");
+            } else {
+                intent.putExtra(Intent.EXTRA_TEXT, shareWeatherText);
+                intent.setType("text/plain");
+            }
+        } else {
+            intent.putExtra(Intent.EXTRA_TEXT, shareWeatherText);
+            intent.setType("text/plain");
+        }
+        startActivity(Intent.createChooser(intent, getString(R.string.share_with)));
     }
 
     // 程序onStart时执行检查动作
@@ -273,12 +310,12 @@ public class WeatherActivity extends AppCompatActivity {
         }
     }
 
+    // 接收更改地区的 Intent 返回值
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case INTENT_CHOOSE_AREA:
                 if (resultCode == RESULT_OK) {
-                    // 接收更改地区的 Intent 返回值
                     String rCityWeatherId = "city=" + data.getStringExtra("city_weather_id");
                     cityWeatherId = rCityWeatherId;
                     swipeRefresh.setRefreshing(true);
@@ -290,6 +327,7 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
     // 获取 Bing 每日一图地址，保存地址并设置背景
+
     private void loadBgImage() {
         if (pref.getBoolean(Conf.PREF_ENABLE_BG_IMAGE, true)) {
             final String bingPicApiUrl = "http://guolin.tech/api/bing_pic";
@@ -362,14 +400,15 @@ public class WeatherActivity extends AppCompatActivity {
     // 根据 weather 对象更新 UI 天气显示
     private void showWeatherInfo(Weather weather) {
         titleCityText.setText(weather.basic.cityName);
+        nowDetailTitleText.setText(weather.basic.cityName);
         titleUpdateTimeText.setText(weather.basic.update.updateTime);
         temperatureText.setText(weather.now.temperature + "℃");
         weatherStatusText.setText(weather.now.condition.info + "天");
         // 设置分享信息
         shareWeatherText = weather.basic.cityName + ", "
-                + weather.basic.update.updateTime + ", "
-                + weather.now.temperature + "℃" + ",  "
-                + weather.now.condition.info;
+                + weather.now.condition.info + ", "
+                + weather.now.temperature + "℃" + ", "
+                + weather.basic.update.updateTime;
         /* 天气详细信息开始 */
         temperatureDetailText.setText(weather.now.temperature + "℃");
         infoDetailText.setText(weather.now.condition.info);
