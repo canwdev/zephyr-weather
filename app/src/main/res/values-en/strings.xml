@@ -36,7 +36,7 @@
     <string name="settings_custom_api_key">Custom API key</string>
     <string name="settings_custom_area_code">Custom area code</string>
     <string name="settings_enable_background_image">Enable background image</string>
-    <string name="settings_enable_update_service">Enable background update weather (1hour)</string>
+    <string name="settings_enable_update_service">Enable background service</string>
     <string name="share_with">Share with</string>
     <string name="settings_clear_all">Reset all settings</string>
     <string name="about_info">A simple Android weather app using the heweather API v5.</string>
@@ -51,7 +51,15 @@
     <string name="search_area_result">Search Result</string>
     <string name="get_area_list_failed">Get area list failed, please check your Internet connection</string>
     <string name="loading">Loading...</string>
-    <string name="invalid_key">Invalid API KEY</string>
+    <string name="err_invalid_key">Invalid API KEY</string>
     <string name="get_picture_url_failed">Get picture url failed</string>
     <string name="get_weather_info_failed">Get weather information failed</string>
+    <string name="settings_clear_cache">Clear cache</string>
+    <string name="settings_clear_cache_success">Cache cleared</string>
+    <string name="err_invalid_city">Invalid city code</string>
+    <string name="err_no_area_data">No data for this area</string>
+    <string name="err_no_more_requests">No more requests, try again tomorrow</string>
+    <string name="err_param_invalid">Param invalid</string>
+    <string name="err_unknow_error">Unknow error</string>
+    <string name="city_name">City Name</string>
 </resources>

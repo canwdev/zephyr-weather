@@ -36,7 +36,7 @@
     <string name="settings_custom_area_code">自定义区域代码</string>
     <string name="settings_custom_api_key">自定义 API KEY</string>
     <string name="settings_enable_background_image">启用 Bing 每日一图</string>
-    <string name="settings_enable_update_service">启用每小时后台更新天气</string>
+    <string name="settings_enable_update_service">启用后台服务</string>
     <string name="about_github">Github 查看源码</string>
     <string name="settings_clear_all">重置全部设置</string>
     <string name="about_developer" translatable="false">canwdev</string>
@@ -55,10 +55,15 @@
     <string name="search_area_failed">查询无结果</string>
     <string name="get_area_list_failed">获取省市县列表失败，请检查网络连接</string>
     <string name="loading">加载中...</string>
-    <string name="invalid_key">API KEY 无效</string>
+    <string name="err_invalid_key">API KEY 无效</string>
     <string name="get_picture_url_failed">获取图片地址失败</string>
     <string name="get_weather_info_failed">获取天气信息失败</string>
     <string name="settings_clear_cache">清除缓存</string>
     <string name="settings_clear_cache_success">已清除</string>
-    <string name="settings_clear_cache_noneed">无需清理</string>
+    <string name="err_invalid_city">城市代码无效</string>
+    <string name="err_unknow_error">未知错误</string>
+    <string name="err_no_more_requests">超过访问次数，请明天再试</string>
+    <string name="err_no_area_data">该地区没有数据</string>
+    <string name="err_param_invalid">参数错误</string>
+    <string name="city_name">城市名称</string>
 </resources>

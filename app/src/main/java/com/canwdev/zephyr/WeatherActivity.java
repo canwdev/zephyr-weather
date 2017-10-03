@@ -55,7 +55,7 @@ public class WeatherActivity extends AppCompatActivity {
     private SharedPreferences pref;
     private String apiKey;
     // public static final String WEATHER_API_URL_SAMPLE = WEATHER_API_URL + CITY_SAMPLE + apiKey;
-    private String cityWeatherId = Conf.HEWEATHER_CITY_SAMPLE2;
+    private String cityWeatherId = Conf.HEWEATHER_CITY_SAMPLE_NULL;
     // 各控件
     private DrawerLayout mDrawerLayout;
     private ImageButton buttonOpenDrawer;
@@ -281,7 +281,7 @@ public class WeatherActivity extends AppCompatActivity {
                         swipeRefresh.setRefreshing(true);
                         requestWeather(cityWeatherId);
                     } else {
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat(Conf.DATE_TIME_FORMAT);
                         try {
                             Date cachedUpdateTime = dateFormat.parse(weather.basic.update.updateTime);
                             Date SystemTime = new Date();
@@ -392,10 +392,31 @@ public class WeatherActivity extends AppCompatActivity {
                             editor.apply();
                             showWeatherInfo(weather);
                             Utility.recordRecentArea(weather.basic.weatherId, weather.basic.cityName);
+                        } else {
+                            // 显示错误信息
+                            String errorMessage = getString(R.string.err_unknow_error);
+                            switch (weather.status) {
+                                case "invalid key":
+                                    errorMessage = getString(R.string.err_invalid_key);
+                                    break;
+                                case "unknown city":
+                                    errorMessage = getString(R.string.err_invalid_city);
+                                    break;
+                                case "no data for this location":
+                                    errorMessage = getString(R.string.err_no_area_data);
+                                    break;
+                                case "no more requests":
+                                    errorMessage = getString(R.string.err_no_more_requests);
+                                    break;
+                                case "param invalid":
+                                    errorMessage = getString(R.string.err_param_invalid);
+                                    break;
+                                default:
+                                    break;
+                            }
+                            Snackbar.make(weatherScrollView, errorMessage, Snackbar.LENGTH_LONG).show();
                         }
-                        if ("invalid key".equals(weather.status)) {
-                            Snackbar.make(weatherScrollView, getString(R.string.invalid_key), Snackbar.LENGTH_SHORT).show();
-                        }
+
                         weatherScrollView.setVisibility(View.VISIBLE);
 
                         /*刷新动画效果*/

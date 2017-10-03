@@ -22,6 +22,7 @@ import com.canwdev.zephyr.db.City;
 import com.canwdev.zephyr.db.County;
 import com.canwdev.zephyr.db.Province;
 import com.canwdev.zephyr.db.RecentArea;
+import com.canwdev.zephyr.service.UpdateWeatherService;
 import com.canwdev.zephyr.util.Conf;
 
 import org.litepal.crud.DataSupport;
@@ -32,7 +33,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     Switch serviceSwitch;
     Switch backgroundSwitch;
-    private boolean doNotSave = false;
+    private boolean resetOption = false;
     ScrollView scrollView;
 
     private SharedPreferences pref;
@@ -177,7 +178,7 @@ public class SettingsActivity extends AppCompatActivity {
                         DataSupport.deleteAll(City.class);
                         DataSupport.deleteAll(County.class);
                         DataSupport.deleteAll(RecentArea.class);
-                        doNotSave = true;
+                        resetOption = true;
                         clearCache();
                         finish();
                     }
@@ -212,8 +213,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        if (doNotSave) {
-
+        if (resetOption) {
+            Intent intent = new Intent(this, UpdateWeatherService.class);
+            stopService(intent);
         } else {
             saveSettings();
         }
