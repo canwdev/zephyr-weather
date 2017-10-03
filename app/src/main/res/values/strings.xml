@@ -58,4 +58,7 @@
     <string name="invalid_key">API KEY 无效</string>
     <string name="get_picture_url_failed">获取图片地址失败</string>
     <string name="get_weather_info_failed">获取天气信息失败</string>
+    <string name="settings_clear_cache">清除缓存</string>
+    <string name="settings_clear_cache_success">已清除</string>
+    <string name="settings_clear_cache_noneed">无需清理</string>
 </resources>

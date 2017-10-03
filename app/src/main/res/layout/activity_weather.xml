@@ -40,24 +40,37 @@
 
                     <include layout="@layout/frag_weather_title" />
 
-                    <include layout="@layout/frag_weather_now" />
+                    <LinearLayout
+                        android:id="@+id/LinearLayout_mainAnim"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                    <include layout="@layout/frag_weather_now_detail" />
+                        <include
+                            layout="@layout/frag_weather_now"
+                            android:layout_width="match_parent" />
 
-                    <include layout="@layout/frag_weather_hourly_forecast" />
+                        <include layout="@layout/frag_weather_now_detail" />
 
-                    <include layout="@layout/frag_weather_daily_forecast" />
+                        <include layout="@layout/frag_weather_hourly_forecast" />
 
-                    <include layout="@layout/frag_weather_aqi" />
+                        <include layout="@layout/frag_weather_daily_forecast" />
 
-                    <include layout="@layout/frag_weather_suggestion" />
+                        <include layout="@layout/frag_weather_aqi" />
+
+                        <include layout="@layout/frag_weather_suggestion" />
+                    </LinearLayout>
+
+
+
+
                 </LinearLayout>
             </ScrollView>
         </android.support.v4.widget.SwipeRefreshLayout>
 
         <android.support.design.widget.NavigationView
             android:id="@+id/weather_drawer_navigation"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             app:elevation="100dp"

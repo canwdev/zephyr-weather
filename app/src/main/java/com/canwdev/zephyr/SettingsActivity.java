@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -21,15 +23,17 @@ import com.canwdev.zephyr.db.County;
 import com.canwdev.zephyr.db.Province;
 import com.canwdev.zephyr.db.RecentArea;
 import com.canwdev.zephyr.util.Conf;
-import com.canwdev.zephyr.util.Utility;
 
 import org.litepal.crud.DataSupport;
+
+import java.io.File;
 
 public class SettingsActivity extends AppCompatActivity {
 
     Switch serviceSwitch;
     Switch backgroundSwitch;
     private boolean doNotSave = false;
+    ScrollView scrollView;
 
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
@@ -46,7 +50,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         // 打开时的动画
-        ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView_settings);
+        scrollView = (ScrollView) findViewById(R.id.scrollView_settings);
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_card_show);
         scrollView.startAnimation(animation);
 
@@ -154,7 +158,15 @@ public class SettingsActivity extends AppCompatActivity {
     public void button_clearAllSettings(View view) {
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(this)
-                .setTitle(getResources().getString(R.string.settings_clear_all)+"?")
+                .setTitle(getResources().getString(android.R.string.dialog_alert_title))
+                .setMessage(getResources().getString(R.string.settings_clear_all)+"?")
+                .setNeutralButton(getString(R.string.settings_clear_cache), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        clearCache();
+                        Snackbar.make(scrollView, getString(R.string.settings_clear_cache_success), Snackbar.LENGTH_SHORT).show();
+                    }
+                })
                 .setNegativeButton(android.R.string.cancel, null)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
@@ -166,10 +178,36 @@ public class SettingsActivity extends AppCompatActivity {
                         DataSupport.deleteAll(County.class);
                         DataSupport.deleteAll(RecentArea.class);
                         doNotSave = true;
+                        clearCache();
                         finish();
                     }
                 });
         dialog.show();
+    }
+
+    // 清除缓存
+    private void clearCache() {
+        deleteDir(getCacheDir());
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            deleteDir(getExternalCacheDir());
+        }
+    }
+
+    // 删除文件夹
+    private static boolean deleteDir(File dir) {
+        if(dir == null){
+            return false;
+        }
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+        return dir.delete();
     }
 
     @Override

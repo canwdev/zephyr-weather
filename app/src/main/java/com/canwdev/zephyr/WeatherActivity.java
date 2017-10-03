@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -17,6 +19,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -89,6 +93,21 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView uvText;
     private TextView sportText;
     private String shareWeatherText;
+    /*刷新动画效果*/
+    private Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    final LinearLayout animView = (LinearLayout) findViewById(R.id.LinearLayout_mainAnim);
+                    final Animation animShow = AnimationUtils.loadAnimation(WeatherActivity.this, R.anim.anim_card_show);
+                    animView.setAnimation(animShow);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -212,34 +231,34 @@ public class WeatherActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_SEND);
 
         // 分享天气详细信息截图
-        CardView CardView_nowDetail = (CardView) findViewById(R.id.CardView_nowDetail);
-        CardView_nowDetail.setDrawingCacheEnabled(true);
-        Bitmap bitmap = CardView_nowDetail.getDrawingCache();
-        bitmap = bitmap.createBitmap(bitmap);
-        CardView_nowDetail.setDrawingCacheEnabled(false);
+        CardView pscView = (CardView) findViewById(R.id.CardView_nowDetail);
+        pscView.setDrawingCacheEnabled(true);
+        Bitmap bitmap = pscView.getDrawingCache();
+        bitmap = Bitmap.createBitmap(bitmap);
+        pscView.setDrawingCacheEnabled(false);
         if (bitmap != null) {
             final File f = new File(getExternalCacheDir(), "img_cache.png");
             if (f.exists()) {
                 f.delete();
-                try {
-                    FileOutputStream out = new FileOutputStream(f);
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
-                    out.flush();
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Uri u = Uri.fromFile(f);
-                intent.putExtra(Intent.EXTRA_STREAM, u);
-                intent.setType("image/jpeg");
-            } else {
-                intent.putExtra(Intent.EXTRA_TEXT, shareWeatherText);
-                intent.setType("text/plain");
             }
+            try {
+                FileOutputStream out = new FileOutputStream(f);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+                out.flush();
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Uri u = Uri.fromFile(f);
+            intent.putExtra(Intent.EXTRA_TEXT, shareWeatherText);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_STREAM, u);
+            intent.setType("image/jpeg");
         } else {
             intent.putExtra(Intent.EXTRA_TEXT, shareWeatherText);
             intent.setType("text/plain");
         }
+
         startActivity(Intent.createChooser(intent, getString(R.string.share_with)));
     }
 
@@ -257,26 +276,28 @@ public class WeatherActivity extends AppCompatActivity {
             if (setCityWeatherId != null) {
                 cityWeatherId = "city=" + setCityWeatherId;
                 // 检查默认地区设置是否一致
-                if (!weather.basic.weatherId.equals(setCityWeatherId)) {
-                    swipeRefresh.setRefreshing(true);
-                    requestWeather(cityWeatherId);
-                } else {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                    try {
-                        Date cachedUpdateTime = dateFormat.parse(weather.basic.update.updateTime);
-                        Date SystemTime = new Date();
-                        // 如果缓存时间与系统时间相差大于1小时，则更新
-                        long diff = SystemTime.getTime() - cachedUpdateTime.getTime();
-                        double hours = (double) diff / (1000 * 60 * 60);
-                        if (hours > 1) {
-                            swipeRefresh.setRefreshing(true);
-                            requestWeather(cityWeatherId);
-                        } else {
-                            showWeatherInfo(weather);
+                if (weather != null) {
+                    if (!weather.basic.weatherId.equals(setCityWeatherId)) {
+                        swipeRefresh.setRefreshing(true);
+                        requestWeather(cityWeatherId);
+                    } else {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                        try {
+                            Date cachedUpdateTime = dateFormat.parse(weather.basic.update.updateTime);
+                            Date SystemTime = new Date();
+                            // 如果缓存时间与系统时间相差大于1小时，则更新
+                            long diff = SystemTime.getTime() - cachedUpdateTime.getTime();
+                            double hours = (double) diff / (1000 * 60 * 60);
+                            if (hours > 1) {
+                                swipeRefresh.setRefreshing(true);
+                                requestWeather(cityWeatherId);
+                            } else {
+                                showWeatherInfo(weather);
+                            }
+                        } catch (ParseException e) {
+                            Log.e(TAG, "ParseException: " + e.getMessage(), e);
+                            e.printStackTrace();
                         }
-                    } catch (ParseException e) {
-                        Log.e(TAG, "ParseException: " + e.getMessage(), e);
-                        e.printStackTrace();
                     }
                 }
             } else {
@@ -327,7 +348,6 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
     // 获取 Bing 每日一图地址，保存地址并设置背景
-
     private void loadBgImage() {
         if (pref.getBoolean(Conf.PREF_ENABLE_BG_IMAGE, true)) {
             final String bingPicApiUrl = "http://guolin.tech/api/bing_pic";
@@ -377,6 +397,28 @@ public class WeatherActivity extends AppCompatActivity {
                             Snackbar.make(weatherScrollView, getString(R.string.invalid_key), Snackbar.LENGTH_SHORT).show();
                         }
                         weatherScrollView.setVisibility(View.VISIBLE);
+
+                        /*刷新动画效果*/
+                        final LinearLayout animView = (LinearLayout) findViewById(R.id.LinearLayout_mainAnim);
+                        Animation animHide = AnimationUtils.loadAnimation(WeatherActivity.this, R.anim.anim_card_hide);
+                        animView.setAnimation(animHide);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Thread.sleep(100);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                Message message = new Message();
+                                message.what = 1;
+                                Bundle data = new Bundle();
+                                message.setData(data);
+                                handler.sendMessage(message);
+                            }
+                        }).start();
+                        /*刷新动画效果*/
+
                         swipeRefresh.setRefreshing(false);
                     }
                 });
@@ -429,10 +471,10 @@ public class WeatherActivity extends AppCompatActivity {
             for (HourlyForecast hourlyForecast : weather.hourlyForecastList) {
                 View view = LayoutInflater.from(this)
                         .inflate(R.layout.frag_weather_hourly_forecast_item, hourlyForecastLayout, false);
-                TextView timeText = (TextView) view.findViewById(R.id.textView_hfTime);
-                TextView statusText = (TextView) view.findViewById(R.id.textView_hfStatus);
-                TextView tempe = (TextView) view.findViewById(R.id.textView_hfTempe);
-                TextView probability = (TextView) view.findViewById(R.id.textView_hfPop);
+                TextView timeText = view.findViewById(R.id.textView_hfTime);
+                TextView statusText = view.findViewById(R.id.textView_hfStatus);
+                TextView tempe = view.findViewById(R.id.textView_hfTempe);
+                TextView probability = view.findViewById(R.id.textView_hfPop);
                 timeText.setText(hourlyForecast.date.split(" ")[1]);
                 statusText.setText(hourlyForecast.condition.info);
                 tempe.setText(hourlyForecast.temperature + "℃");
@@ -449,10 +491,10 @@ public class WeatherActivity extends AppCompatActivity {
         for (DailyForecast dailyForecast : weather.dailyForecastList) {
             View view = LayoutInflater.from(this)
                     .inflate(R.layout.frag_weather_daily_forecast_item, dailyForecastLayout, false);
-            TextView dateText = (TextView) view.findViewById(R.id.textView_fDate);
-            TextView infoText = (TextView) view.findViewById(R.id.textView_fStatus);
-            TextView maxText = (TextView) view.findViewById(R.id.textView_tMax);
-            TextView minText = (TextView) view.findViewById(R.id.textView_tMin);
+            TextView dateText = view.findViewById(R.id.textView_fDate);
+            TextView infoText = view.findViewById(R.id.textView_fStatus);
+            TextView maxText = view.findViewById(R.id.textView_tMax);
+            TextView minText = view.findViewById(R.id.textView_tMin);
             dateText.setText(dailyForecast.date.substring(5));
             infoText.setText(dailyForecast.condition.info);
             maxText.setText(dailyForecast.temperature.max + "℃");
