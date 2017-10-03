@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -190,7 +191,7 @@ public class ChooseAreaActivity extends AppCompatActivity {
                                     setResult(RESULT_OK, intent);
                                     finish();
                                 } else {
-                                    Toast.makeText(ChooseAreaActivity.this, getString(R.string.search_area_failed), Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(listView, getString(R.string.search_area_failed), Snackbar.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -271,7 +272,7 @@ public class ChooseAreaActivity extends AppCompatActivity {
                 listView.setSelection(0);
                 currentLevel = LEVEL_SEARCH;
             } else {
-                Toast.makeText(this, getString(R.string.search_area_failed), Toast.LENGTH_SHORT).show();
+                Snackbar.make(listView, getString(R.string.search_area_failed), Snackbar.LENGTH_SHORT).show();
             }
         } else {
             searchAreaFromServer(Conf.HEWEATHER_SEARCH_AREA_API + "city=" + areaName + "&key=" + Conf.getKey(ChooseAreaActivity.this));
@@ -331,7 +332,7 @@ public class ChooseAreaActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         closeProgressDialog();
-                        Toast.makeText(ChooseAreaActivity.this, getString(R.string.search_area_failed), Toast.LENGTH_SHORT).show();
+                        Snackbar.make(listView, getString(R.string.get_area_list_failed), Snackbar.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -363,7 +364,7 @@ public class ChooseAreaActivity extends AppCompatActivity {
                     public void run() {
                         searchedArea = null;
                         closeProgressDialog();
-                        Toast.makeText(ChooseAreaActivity.this, getString(R.string.get_area_list_failed) + "\n" + apiAddress, Toast.LENGTH_SHORT).show();
+                        Snackbar.make(listView, getString(R.string.search_area_failed), Snackbar.LENGTH_SHORT).show();
                     }
                 });
             }

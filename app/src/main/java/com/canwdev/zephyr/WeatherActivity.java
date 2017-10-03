@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -48,7 +49,7 @@ public class WeatherActivity extends AppCompatActivity {
     private SharedPreferences pref;
     private String apiKey;
     // public static final String WEATHER_API_URL_SAMPLE = WEATHER_API_URL + CITY_SAMPLE + apiKey;
-    private String cityWeatherId = "city=CN101240213";
+    private String cityWeatherId = Conf.HEWEATHER_CITY_SAMPLE2;
     // 各控件
     private DrawerLayout mDrawerLayout;
     private ImageButton buttonOpenDrawer;
@@ -189,7 +190,7 @@ public class WeatherActivity extends AppCompatActivity {
                             Intent downloadIntent = new Intent(Intent.ACTION_VIEW, uri);
                             startActivity(downloadIntent);
                         } else {
-                            Toast.makeText(WeatherActivity.this, "Getting picture url failed", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(weatherScrollView, getString(R.string.get_picture_url_failed), Snackbar.LENGTH_SHORT).show();
                         }
                         break;
                     case R.id.drawer_item_github:
@@ -335,7 +336,7 @@ public class WeatherActivity extends AppCompatActivity {
                             Utility.recordRecentArea(weather.basic.weatherId, weather.basic.cityName);
                         }
                         if ("invalid key".equals(weather.status)) {
-                            Toast.makeText(WeatherActivity.this, "invalid key", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(weatherScrollView, getString(R.string.invalid_key), Snackbar.LENGTH_SHORT).show();
                         }
                         weatherScrollView.setVisibility(View.VISIBLE);
                         swipeRefresh.setRefreshing(false);
@@ -349,8 +350,7 @@ public class WeatherActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         weatherScrollView.setVisibility(View.VISIBLE);
-                        Toast.makeText(WeatherActivity.this, "Get weather information failed"
-                                , Toast.LENGTH_SHORT).show();
+                        Snackbar.make(weatherScrollView, getString(R.string.get_weather_info_failed), Snackbar.LENGTH_SHORT).show();
                         swipeRefresh.setRefreshing(false);
                     }
                 });
