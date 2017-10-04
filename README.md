@@ -22,7 +22,7 @@ A simple Android weather app using the heweather API.
 
 ---
 
-<a href="./release/preview_20171004.png">
+<img src="./release/preview_20171004.png" width="30%"/>
 
 ---
 
