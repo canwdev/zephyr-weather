@@ -1,5 +1,7 @@
 # 微风天气 · Zephyr Weather
 
+<img src="./app/src/main/ic_launcher-web.png" width="30%"/>
+
 一个简单的 Android 天气应用，使用和风天气接口。
 
 A simple Android weather app using the heweather API.
@@ -17,6 +19,10 @@ A simple Android weather app using the heweather API.
 * 以 Bing 每日一图作为背景（可关闭）
 * 后台天气通知服务（可选开启）
 * 支持天气时钟小部件
+
+---
+
+<a href="./release/preview_20171004.png">
 
 ---
 
