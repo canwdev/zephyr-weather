@@ -12,6 +12,7 @@ A simple Android weather app using the heweather API.
 
 ### 功能特性 · Feature
 
+* 支持 Android 4.0.3+ 系统 (API 15+)
 * 可显示天气详细信息、每小时预报、3天预报、空气质量以及生活建议
 * 多城市跳转，选择城市历史记录
 * 支持城市搜索，自定义 weatherId 与 apiKey
@@ -22,7 +23,7 @@ A simple Android weather app using the heweather API.
 
 ---
 
-<img src="./release/preview_20171004.png" width="30%"/>
+<img src="./release/preview_20171004.png" width="100%"/>
 
 ---
 
