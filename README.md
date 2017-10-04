@@ -8,6 +8,18 @@ A simple Android weather app using the heweather API.
 
 ---
 
+### 简介 · Feature
+
+* 可显示天气详细信息，以及3天预报
+* 可显示 Bing 每日一图作为背景
+* 多城市跳转，选择城市历史记录
+* 可以搜索城市，自定义 weatherId 与 apiKey
+* 可分享天气信息截图
+* 后台天气通知服务（可选开启）
+* 支持天气时钟小部件
+
+---
+
 ### Open Source License
 
 ```
