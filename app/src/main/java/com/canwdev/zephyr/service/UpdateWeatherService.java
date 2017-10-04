@@ -39,12 +39,11 @@ public class UpdateWeatherService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        updateWeather();
+        getWeather();
         updateBingPic();
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        // 每1小时后台更新一次
-        int eightHours = 1 * 60 * 60 * 1000;
-        long triggerAtTime = SystemClock.elapsedRealtime() + eightHours;
+        // 每小时后台更新一次
+        long triggerAtTime = SystemClock.elapsedRealtime() + Conf.WEATHER_UPDATE_HOURS;
         Intent i = new Intent(this, UpdateWeatherService.class);
         PendingIntent pi = PendingIntent.getService(this, 0, i, 0);
         manager.cancel(pi);
@@ -70,7 +69,7 @@ public class UpdateWeatherService extends Service {
                 }
             }
         } else {
-            updateWeather();
+            getWeather();
         }
     }
 
@@ -91,7 +90,7 @@ public class UpdateWeatherService extends Service {
                 .setContentIntent(pi)
                 .setWhen(updateTime.getTime())
                 .setContentTitle(cityName)
-                .setContentText(conditionInfo + " " + temperature + "℃"+" ("+windForce+"级"+windDirection+") ");
+                .setContentText(conditionInfo + " " + temperature + getString(R.string.u_celsius)+" ("+windForce+getString(R.string.u_weather_decorate)+windDirection+") ");
         if (0 < temperature) {
             builder.setProgress(50, temperature, false);
         }
@@ -99,7 +98,7 @@ public class UpdateWeatherService extends Service {
     }
 
     // 更新天气，保存设置，显示通知
-    private void updateWeather() {
+    private void getWeather() {
         SharedPreferences prefAllSettings = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE);
         String setCityWeatherId = "city=" + prefAllSettings.getString(Conf.PREF_WEATHER_ID, null);
         String apiKey = "&key=" + Conf.getKey(this);

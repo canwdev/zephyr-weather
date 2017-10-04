@@ -15,8 +15,8 @@
         <activity
             android:name=".WeatherActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppThemeNoActionBar"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@style/AppThemeNoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,7 +43,22 @@
         <activity
             android:name=".RecentAreaActivity"
             android:label="@string/recent_area"
-            android:theme="@style/DialogNoTitle"></activity>
+            android:theme="@style/DialogNoTitle" />
+
+        <receiver android:name=".widget.WeatherWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/weather_widget_info" />
+        </receiver>
+
+        <service
+            android:name=".service.WidgetService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:text="@string/now_detail"
+                android:text="@string/weather_now_detail"
                 android:textColor="@android:color/background_light"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -44,7 +44,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_margin="10dp"
-                android:text="UpdateTime" />
+                android:text="@string/weather_update_time" />
         </LinearLayout>
 
         <LinearLayout
@@ -75,7 +75,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
-                        android:text="@string/temperature" />
+                        android:text="@string/weather_temperature" />
 
                     <TextView
                         android:id="@+id/temperature"
@@ -122,7 +122,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
-                        android:text="@string/felling" />
+                        android:text="@string/weather_felling" />
 
                     <TextView
                         android:id="@+id/felling"
@@ -145,7 +145,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
-                        android:text="@string/pressure" />
+                        android:text="@string/weather_pressure" />
 
                     <TextView
                         android:id="@+id/pressure"
@@ -169,7 +169,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
-                        android:text="@string/humidity" />
+                        android:text="@string/weather_humidity" />
 
                     <TextView
                         android:id="@+id/humidity"
@@ -193,7 +193,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
-                        android:text="@string/precipitation" />
+                        android:text="@string/weather_precipitation" />
 
                     <TextView
                         android:id="@+id/precipitation"
@@ -216,7 +216,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
-                        android:text="@string/visibility" />
+                        android:text="@string/weather_visibility" />
 
                     <TextView
                         android:id="@+id/visibility"
@@ -248,7 +248,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
-                        android:text="@string/degree" />
+                        android:text="@string/weather_wind_degree" />
 
                     <TextView
                         android:id="@+id/degree"
@@ -271,7 +271,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
-                        android:text="@string/direction" />
+                        android:text="@string/weather_wind_direction" />
 
                     <TextView
                         android:id="@+id/direction"
@@ -295,7 +295,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
-                        android:text="@string/windforce" />
+                        android:text="@string/weather_wind_windforce" />
 
                     <TextView
                         android:id="@+id/windforce"
@@ -319,7 +319,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
-                        android:text="@string/speed" />
+                        android:text="@string/weather_wind_speed" />
 
                     <TextView
                         android:id="@+id/speed"

@@ -285,10 +285,10 @@ public class WeatherActivity extends AppCompatActivity {
                         try {
                             Date cachedUpdateTime = dateFormat.parse(weather.basic.update.updateTime);
                             Date SystemTime = new Date();
-                            // 如果缓存时间与系统时间相差大于1小时，则更新
+                            // 如果缓存时间与系统时间相差大于-小时，则更新
                             long diff = SystemTime.getTime() - cachedUpdateTime.getTime();
                             double hours = (double) diff / (1000 * 60 * 60);
-                            if (hours > 1) {
+                            if (hours > Conf.WEATHER_UPDATE_HOURS) {
                                 swipeRefresh.setRefreshing(true);
                                 requestWeather(cityWeatherId);
                             } else {
@@ -465,25 +465,25 @@ public class WeatherActivity extends AppCompatActivity {
         titleCityText.setText(weather.basic.cityName);
         nowDetailTitleText.setText(weather.basic.cityName);
         titleUpdateTimeText.setText(weather.basic.update.updateTime);
-        temperatureText.setText(weather.now.temperature + "℃");
-        weatherStatusText.setText(weather.now.condition.info + "天");
+        temperatureText.setText(weather.now.temperature + getString(R.string.u_celsius));
+        weatherStatusText.setText(weather.now.condition.info + getString(R.string.u_weather_decorate));
         // 设置分享信息
         shareWeatherText = weather.basic.cityName + ", "
                 + weather.now.condition.info + ", "
-                + weather.now.temperature + "℃" + ", "
+                + weather.now.temperature + getString(R.string.u_celsius) + ", "
                 + weather.basic.update.updateTime;
         /* 天气详细信息开始 */
-        temperatureDetailText.setText(weather.now.temperature + "℃");
+        temperatureDetailText.setText(weather.now.temperature + getString(R.string.u_celsius));
         infoDetailText.setText(weather.now.condition.info);
-        fellingDetailText.setText(weather.now.felling + "℃");
+        fellingDetailText.setText(weather.now.felling + getString(R.string.u_celsius));
         pressureDetailText.setText(weather.now.pressure);
-        humidityDetailText.setText(weather.now.humidity + "%");
-        precipitationDetailText.setText(weather.now.precipitation + "mm");
-        visibilityDetailText.setText(weather.now.visibility + "km");
+        humidityDetailText.setText(weather.now.humidity + getString(R.string.u_percent));
+        precipitationDetailText.setText(weather.now.precipitation + getString(R.string.u_millimeter));
+        visibilityDetailText.setText(weather.now.visibility + getString(R.string.u_kilometer));
         degreeDetailText.setText(weather.now.wind.degree);
         directionDetailText.setText(weather.now.wind.direction);
-        windforceDetailText.setText(weather.now.wind.windforce + "级");
-        speedDetailText.setText(weather.now.wind.speed + "kmph");
+        windforceDetailText.setText(weather.now.wind.windforce + getString(R.string.u_windforce));
+        speedDetailText.setText(weather.now.wind.speed + getString(R.string.u_windspeed));
         /* 天气详细信息结束 */
         // 解析几小时预报
         CardView cardViewHourly = (CardView) findViewById(R.id.CardView_hourly);
@@ -498,8 +498,8 @@ public class WeatherActivity extends AppCompatActivity {
                 TextView probability = view.findViewById(R.id.textView_hfPop);
                 timeText.setText(hourlyForecast.date.split(" ")[1]);
                 statusText.setText(hourlyForecast.condition.info);
-                tempe.setText(hourlyForecast.temperature + "℃");
-                probability.setText(hourlyForecast.probability + "%");
+                tempe.setText(hourlyForecast.temperature + getString(R.string.u_celsius));
+                probability.setText(hourlyForecast.probability + getString(R.string.u_percent));
                 hourlyForecastLayout.addView(view);
             }
             cardViewHourly.setVisibility(View.VISIBLE);
@@ -518,8 +518,8 @@ public class WeatherActivity extends AppCompatActivity {
             TextView minText = view.findViewById(R.id.textView_tMin);
             dateText.setText(dailyForecast.date.substring(5));
             infoText.setText(dailyForecast.condition.info);
-            maxText.setText(dailyForecast.temperature.max + "℃");
-            minText.setText(dailyForecast.temperature.min + "℃");
+            maxText.setText(dailyForecast.temperature.max + getString(R.string.u_celsius));
+            minText.setText(dailyForecast.temperature.min + getString(R.string.u_celsius));
             dailyForecastLayout.addView(view);
         }
         // 解析AQI指数

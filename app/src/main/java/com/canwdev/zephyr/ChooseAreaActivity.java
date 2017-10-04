@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.canwdev.zephyr.db.City;
 import com.canwdev.zephyr.db.County;
@@ -191,7 +190,7 @@ public class ChooseAreaActivity extends AppCompatActivity {
                                     setResult(RESULT_OK, intent);
                                     finish();
                                 } else {
-                                    Snackbar.make(listView, getString(R.string.search_area_failed), Snackbar.LENGTH_SHORT).show();
+                                    Snackbar.make(listView, getString(R.string.err_search_area_failed), Snackbar.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -272,7 +271,7 @@ public class ChooseAreaActivity extends AppCompatActivity {
                 listView.setSelection(0);
                 currentLevel = LEVEL_SEARCH;
             } else {
-                Snackbar.make(listView, getString(R.string.search_area_failed), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(listView, getString(R.string.err_search_area_failed), Snackbar.LENGTH_SHORT).show();
             }
         } else {
             searchAreaFromServer(Conf.HEWEATHER_SEARCH_AREA_API + "city=" + areaName + "&key=" + Conf.getKey(ChooseAreaActivity.this));
@@ -332,7 +331,7 @@ public class ChooseAreaActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         closeProgressDialog();
-                        Snackbar.make(listView, getString(R.string.get_area_list_failed), Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(listView, getString(R.string.err_get_area_list_failed), Snackbar.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -364,7 +363,7 @@ public class ChooseAreaActivity extends AppCompatActivity {
                     public void run() {
                         searchedArea = null;
                         closeProgressDialog();
-                        Snackbar.make(listView, getString(R.string.search_area_failed), Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(listView, getString(R.string.err_search_area_failed), Snackbar.LENGTH_SHORT).show();
                     }
                 });
             }

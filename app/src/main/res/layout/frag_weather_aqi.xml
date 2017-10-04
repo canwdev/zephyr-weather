@@ -63,7 +63,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
-                        android:text="@string/aqi" />
+                        android:text="@string/weather_aqi" />
                 </LinearLayout>
             </RelativeLayout>
 
@@ -91,7 +91,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
-                        android:text="@string/pm_2_5" />
+                        android:text="@string/weather_pm_2_5" />
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>
