@@ -58,7 +58,12 @@
         <service
             android:name=".service.WidgetService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity android:name=".util.TestActivity"
+            android:label="@string/activity_test"
+            android:icon="@drawable/widget_preview">
+        </activity>
     </application>
 
 </manifest>

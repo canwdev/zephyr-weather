@@ -75,4 +75,5 @@
     <string name="u_windforce">级</string>
     <string name="u_windspeed" translatable="false">kmph</string>
     <string name="u_weather_decorate">天</string>
+    <string name="activity_test">微风天气测试</string>
 </resources>

@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.canwdev.zephyr.R;
 import com.canwdev.zephyr.gson.Weather;
@@ -32,21 +33,18 @@ import okhttp3.Response;
 // 天气时钟小部件
 public class WidgetService extends Service {
     private Timer timer;
-    private Weather weather;
-
-    public WidgetService() {
-    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        getWeather();
-        AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        updateWidgetWeather();
         // 每小时后台更新一次
+        AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
         long triggerAtTime = SystemClock.elapsedRealtime() + Conf.WEATHER_UPDATE_HOURS;
         Intent i = new Intent(this, UpdateWeatherService.class);
         PendingIntent pi = PendingIntent.getService(this, 0, i, 0);
         manager.cancel(pi);
         manager.set(AlarmManager.ELAPSED_REALTIME, triggerAtTime, pi);
+
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -59,6 +57,7 @@ public class WidgetService extends Service {
     }
 
     private void updateWidgetWeather() {
+        Weather weather = new Utility(this).getWeather();
         if (weather != null) {
             if ("ok".equals(weather.status)) {
                 String cityName = weather.basic.cityName;
@@ -69,15 +68,12 @@ public class WidgetService extends Service {
 
                 RemoteViews remoteView = new RemoteViews(getPackageName(), R.layout.widget_weather);
                 remoteView.setTextViewText(R.id.textView_widget_city, cityName);
-                remoteView.setTextViewText(R.id.textView_widget_weather, conditionInfo
-                        + getString(R.string.u_weather_decorate)+ " "
+                remoteView.setTextViewText(R.id.textView_widget_weather, conditionInfo + " "
                         + temperature + getString(R.string.u_celsius));
 
                 ComponentName componentName = new ComponentName(getApplicationContext(), WeatherWidget.class);
                 widgetManager.updateAppWidget(componentName, remoteView);
             }
-        } else {
-            getWeather();
         }
     }
 
@@ -93,38 +89,8 @@ public class WidgetService extends Service {
         return null;
     }
 
-    // 更新天气
-    private void getWeather() {
-        SharedPreferences prefAllSettings = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE);
-        String setCityWeatherId = "city=" + prefAllSettings.getString(Conf.PREF_WEATHER_ID, null);
-        String apiKey = "&key=" + Conf.getKey(this);
-        final String weatherUrl = Conf.WEATHER_API_URL + setCityWeatherId + apiKey;
-        HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String responseText = response.body().string();
-                weather = Utility.handleWeatherResponse(responseText);
-                if (weather != null && "ok".equals(weather.status)) {
-                    SharedPreferences.Editor editor = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE).edit();
-                    editor.putString(Conf.PREF_WEATHER_SAVE, responseText);
-                    editor.apply();
-                    if (weather != null) {
-                        updateWidgetWeather();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-    }
-
     // 更新日期时间
     private final class MyTimerTask extends TimerTask {
-        @SuppressLint("SimpleDateFormat")
         @Override
         public void run() {
             SimpleDateFormat sdfTime = new SimpleDateFormat(Conf.WIDGET_CLOCK_TIME_FORMAT);

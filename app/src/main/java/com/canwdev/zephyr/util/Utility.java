@@ -1,6 +1,9 @@
 package com.canwdev.zephyr.util;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.canwdev.zephyr.db.City;
 import com.canwdev.zephyr.db.County;
@@ -15,11 +18,29 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class Utility {
 
     private static final String TAG = "Utility!!";
+    Weather weather;
+    Context context;
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+
+    public Utility(Context context) {
+        this.context = context;
+        pref = context.getSharedPreferences(Conf.PREF_FILE_NAME, context.MODE_PRIVATE);
+        editor = pref.edit();
+    }
 
     // 解析JSON的省级数据，保存到数据库
     public static boolean handleProvinceResponse(String response) {
@@ -151,6 +172,88 @@ public class Utility {
             String areaString = jsonArray.getJSONObject(0).toString();
             return new Gson().fromJson(areaString, SearchedArea.class);
         } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // 根据设置获取天气（用于后台服务）
+
+    public Weather getWeather() {
+        String weatherCache = pref.getString(Conf.PREF_WEATHER_SAVE, null);
+        String setWeatherId = pref.getString(Conf.PREF_WEATHER_ID, null);
+        //cityWeatherId = "city=" + setWeatherId;
+        // 有缓存时直接解析天气数据
+        if (weatherCache != null) {
+            Weather cWeather = Utility.handleWeatherResponse(weatherCache);
+            // 检查城市id是否存在
+            if (setWeatherId != null) {
+                if (cWeather != null && "ok".equals(cWeather.status)) {
+                    // 检查默认地区设置是否一致
+                    if (!cWeather.basic.weatherId.equals(setWeatherId)) {
+                        // 不一致
+                        //requestWeather(cityWeatherId);
+                    } else {
+                        // 如果缓存时间与系统时间相差大于-小时，则更新
+                        SimpleDateFormat dateFormat = new SimpleDateFormat(Conf.DATE_TIME_FORMAT);
+                        try {
+                            Date cachedUpdateTime = dateFormat.parse(cWeather.basic.update.updateTime);
+                            Date SystemTime = new Date();
+                            long diff = SystemTime.getTime() - cachedUpdateTime.getTime();
+                            double hours = (double) diff / (1000 * 60 * 60);
+                            if (hours > Conf.WEATHER_UPDATE_HOURS) {
+                                return requestWeather();
+                            } else {
+                                return cWeather;
+                            }
+                        } catch (ParseException e) {
+                            Log.e(TAG, "ParseException: " + e.getMessage(), e);
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+            return requestWeather();
+
+        } else {
+            // 无缓存时去服务器查询天气
+            return requestWeather();
+        }
+    }
+
+
+    public Weather requestWeather() {
+        String setCityWeatherId = "city=" + pref.getString(Conf.PREF_WEATHER_ID, null);
+        String apiKey = "&key=" + Conf.getKey(context);
+        final String weatherUrl = Conf.WEATHER_API_URL + setCityWeatherId + apiKey;
+        Thread requestThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    Request request = new Request.Builder()
+                            .url(weatherUrl)
+                            .build();
+                    Response response = client.newCall(request).execute();
+
+                    final String responseText = response.body().string();
+                    weather = Utility.handleWeatherResponse(responseText);
+                    if (weather != null && "ok".equals(weather.status)) {
+                        editor.putString(Conf.PREF_WEATHER_SAVE, responseText);
+                        editor.apply();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        requestThread.start();
+        // 线程运行完成后才返回值
+        try {
+            requestThread.join();
+            return weather;
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
         return null;

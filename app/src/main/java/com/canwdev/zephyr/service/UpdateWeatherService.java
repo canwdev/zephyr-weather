@@ -10,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.canwdev.zephyr.R;
 import com.canwdev.zephyr.WeatherActivity;
@@ -30,7 +29,6 @@ import okhttp3.Response;
 
 public class UpdateWeatherService extends Service {
     private static final String TAG = "UWS!!";
-    Weather weather;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -39,37 +37,29 @@ public class UpdateWeatherService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        getWeather();
+        createNotifation();
         updateBingPic();
-        AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
         // 每小时后台更新一次
+        AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
         long triggerAtTime = SystemClock.elapsedRealtime() + Conf.WEATHER_UPDATE_HOURS;
         Intent i = new Intent(this, UpdateWeatherService.class);
         PendingIntent pi = PendingIntent.getService(this, 0, i, 0);
         manager.cancel(pi);
         manager.set(AlarmManager.ELAPSED_REALTIME, triggerAtTime, pi);
+
         return super.onStartCommand(intent, flags, startId);
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        createNotifation();
-    }
-
     // 显示一条前台通知
-    private void createNotifation(){
-        if (weather != null) {
-            if ("ok".equals(weather.status)) {
-                try {
-                    startForeground(1, getNotification(weather));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+    private void createNotifation() {
+        Weather weather = new Utility(this).getWeather();
+
+        if (weather != null && "ok".equals(weather.status)) {
+            try {
+                startForeground(1, getNotification(weather));
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-        } else {
-            getWeather();
         }
     }
 
@@ -90,41 +80,11 @@ public class UpdateWeatherService extends Service {
                 .setContentIntent(pi)
                 .setWhen(updateTime.getTime())
                 .setContentTitle(cityName)
-                .setContentText(conditionInfo + " " + temperature + getString(R.string.u_celsius)+" ("+windForce+getString(R.string.u_weather_decorate)+windDirection+") ");
+                .setContentText(conditionInfo + " " + temperature + getString(R.string.u_celsius) + " (" + windForce + windDirection + ") ");
         if (0 < temperature) {
             builder.setProgress(50, temperature, false);
         }
         return builder.build();
-    }
-
-    // 更新天气，保存设置，显示通知
-    private void getWeather() {
-        SharedPreferences prefAllSettings = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE);
-        String setCityWeatherId = "city=" + prefAllSettings.getString(Conf.PREF_WEATHER_ID, null);
-        String apiKey = "&key=" + Conf.getKey(this);
-        final String weatherUrl = Conf.WEATHER_API_URL +setCityWeatherId+ apiKey;
-        HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String responseText = response.body().string();
-                weather = Utility.handleWeatherResponse(responseText);
-                if (weather != null && "ok".equals(weather.status)) {
-                    SharedPreferences.Editor editor = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE).edit();
-                    editor.putString(Conf.PREF_WEATHER_SAVE, responseText);
-                    editor.apply();
-                    if (weather != null) {
-                        createNotifation();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                Log.e(TAG, "onFailure: ", e);
-            }
-        });
-
     }
 
     // 获取 Bing 每日一图地址，保存设置

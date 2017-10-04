@@ -267,32 +267,33 @@ public class WeatherActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         apiKey = "&key=" + Conf.getKey(WeatherActivity.this);
-        String setCityWeatherId = pref.getString(Conf.PREF_WEATHER_ID, null);
+        String setWeatherId = pref.getString(Conf.PREF_WEATHER_ID, null);
         String weatherCache = pref.getString(Conf.PREF_WEATHER_SAVE, null);
+        cityWeatherId = "city=" + setWeatherId;
         // 有缓存时直接解析天气数据
         if (weatherCache != null) {
-            Weather weather = Utility.handleWeatherResponse(weatherCache);
+            Weather cWeather = Utility.handleWeatherResponse(weatherCache);
             // 检查城市id是否存在
-            if (setCityWeatherId != null) {
-                cityWeatherId = "city=" + setCityWeatherId;
-                // 检查默认地区设置是否一致
-                if (weather != null) {
-                    if (!weather.basic.weatherId.equals(setCityWeatherId)) {
+            if (setWeatherId != null) {
+                if (cWeather != null && "ok".equals(cWeather.status)) {
+                    // 检查默认地区设置是否一致
+                    if (!cWeather.basic.weatherId.equals(setWeatherId)) {
+                        // 不一致
                         swipeRefresh.setRefreshing(true);
                         requestWeather(cityWeatherId);
                     } else {
+                        // 如果缓存时间与系统时间相差大于-小时，则更新
                         SimpleDateFormat dateFormat = new SimpleDateFormat(Conf.DATE_TIME_FORMAT);
                         try {
-                            Date cachedUpdateTime = dateFormat.parse(weather.basic.update.updateTime);
+                            Date cachedUpdateTime = dateFormat.parse(cWeather.basic.update.updateTime);
                             Date SystemTime = new Date();
-                            // 如果缓存时间与系统时间相差大于-小时，则更新
                             long diff = SystemTime.getTime() - cachedUpdateTime.getTime();
                             double hours = (double) diff / (1000 * 60 * 60);
                             if (hours > Conf.WEATHER_UPDATE_HOURS) {
                                 swipeRefresh.setRefreshing(true);
                                 requestWeather(cityWeatherId);
                             } else {
-                                showWeatherInfo(weather);
+                                showWeatherInfo(cWeather);
                             }
                         } catch (ParseException e) {
                             Log.e(TAG, "ParseException: " + e.getMessage(), e);
@@ -301,12 +302,11 @@ public class WeatherActivity extends AppCompatActivity {
                     }
                 }
             } else {
-                showWeatherInfo(weather);
+                showWeatherInfo(cWeather);
             }
         } else {
             // 无缓存时去服务器查询天气
-            if (setCityWeatherId != null) {
-                cityWeatherId = "city=" + setCityWeatherId;
+            if (setWeatherId != null) {
                 swipeRefresh.setRefreshing(true);
                 requestWeather(cityWeatherId);
             } else {

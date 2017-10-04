@@ -14,6 +14,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.canwdev.zephyr.util.Conf;
+import com.canwdev.zephyr.util.TestActivity;
 
 public class AboutActivity extends AppCompatActivity {
 
@@ -50,6 +51,11 @@ public class AboutActivity extends AppCompatActivity {
         Intent iGoGithub = new Intent(Intent.ACTION_VIEW);
         iGoGithub.setData(Uri.parse(Conf.GITHUB_ADDRESS));
         startActivity(iGoGithub);
+    }
+
+    public void card_goTest(View view) {
+        Intent intent = new Intent(AboutActivity.this, TestActivity.class);
+        startActivity(intent);
     }
 
     @Override

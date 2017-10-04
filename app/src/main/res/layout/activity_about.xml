@@ -51,6 +51,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
+                        android:onClick="card_goTest"
                         android:paddingBottom="@dimen/text_margin"
                         android:paddingLeft="@dimen/text_margin"
                         android:paddingRight="4dp"
@@ -70,12 +71,12 @@
                         android:id="@+id/ll_card_about1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/view_card_line"
                         android:background="?android:selectableItemBackground"
                         android:clickable="true"
-                        android:orientation="horizontal"
-                        android:layout_below="@+id/view_card_line"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true">
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="wrap_content"

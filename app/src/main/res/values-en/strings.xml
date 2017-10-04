@@ -65,4 +65,5 @@
     <string name="weather_update_time">Update Time</string>
     <string name="u_weather_decorate">""</string>
     <string name="u_windforce">""</string>
+    <string name="activity_test">Zephyr Weather Test</string>
 </resources>

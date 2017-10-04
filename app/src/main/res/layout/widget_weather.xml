@@ -82,7 +82,7 @@
             android:gravity="right"
             android:text="@string/weather_now_detail"
             android:textColor="@android:color/background_light"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
     </LinearLayout>
 
 </RelativeLayout>

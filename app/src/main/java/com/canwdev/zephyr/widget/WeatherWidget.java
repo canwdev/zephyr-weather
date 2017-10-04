@@ -31,14 +31,18 @@ public class WeatherWidget extends AppWidgetProvider {
         Intent iGoWeather = new Intent(context, WeatherActivity.class);
         PendingIntent piGoWeather = PendingIntent.getActivity(context, 0, iGoWeather, 0);
 
+        // 打开系统时钟
         Intent iGoClock = getPackageIntent("com.android.deskclock", context);
         PendingIntent piGoClock = PendingIntent.getActivity(context, 0, iGoClock, 0);
-
+        // 打开系统日历
         Intent iGoCalendar = getPackageIntent("com.android.calendar", context);
         PendingIntent piGoCalendar = PendingIntent.getActivity(context, 0, iGoCalendar, 0);
 
         Intent iGoRecentArea = new Intent(context, RecentAreaActivity.class);
         PendingIntent piGoRecentArea = PendingIntent.getActivity(context, 0, iGoRecentArea, 0);
+
+        Intent iRefresh = new Intent(context, WidgetService.class);
+        PendingIntent piRefresh=PendingIntent.getService(context, 0, iRefresh, 0);
 
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_weather);
@@ -46,6 +50,7 @@ public class WeatherWidget extends AppWidgetProvider {
         views.setOnClickPendingIntent(R.id.ll_wt, piGoClock);
         views.setOnClickPendingIntent(R.id.ll_wd, piGoCalendar);
         views.setOnClickPendingIntent(R.id.textView_widget_city, piGoRecentArea);
+        views.setOnClickPendingIntent(R.id.textView_widget_weather, piRefresh);
 
 
         // Instruct the widget manager to update the widget

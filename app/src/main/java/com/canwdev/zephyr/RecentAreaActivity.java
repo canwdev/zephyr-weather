@@ -74,4 +74,11 @@ public class RecentAreaActivity extends AppCompatActivity {
             finish();
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // TODO 更新小部件
+
+    }
 }
