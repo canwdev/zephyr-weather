@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.canwdev.zephyr.db.RecentArea;
+import com.canwdev.zephyr.service.WidgetService;
 import com.canwdev.zephyr.util.Conf;
 import com.canwdev.zephyr.util.Utility;
 
@@ -62,8 +63,8 @@ public class RecentAreaActivity extends AppCompatActivity {
         if (recentAreaList.size() > 0) {
             dataList.clear();
             // 倒序输出
-            for (RecentArea recentArea: recentAreaList) {
-                dataList.add(0, recentArea.getAreaName()+"  [" + recentArea.getWeatherId() + "]");
+            for (RecentArea recentArea : recentAreaList) {
+                dataList.add(0, recentArea.getAreaName() + "  [" + recentArea.getWeatherId() + "]");
                 adapter.notifyDataSetChanged();
                 listView.setSelection(0);
             }
@@ -77,8 +78,10 @@ public class RecentAreaActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        if (Utility.isServiceRunning(this, "com.canwdev.zephyr.service.WidgetService")) {
+            Intent intent = new Intent(this, WidgetService.class);
+            startService(intent);
+        }
         super.onDestroy();
-        // TODO 更新小部件
-
     }
 }

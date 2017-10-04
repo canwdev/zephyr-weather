@@ -392,29 +392,10 @@ public class WeatherActivity extends AppCompatActivity {
                             editor.apply();
                             showWeatherInfo(weather);
                             Utility.recordRecentArea(weather.basic.weatherId, weather.basic.cityName);
-                        } else {
+                        } else if (weather != null) {
                             // 显示错误信息
-                            String errorMessage = getString(R.string.err_unknow_error);
-                            switch (weather.status) {
-                                case "invalid key":
-                                    errorMessage = getString(R.string.err_invalid_key);
-                                    break;
-                                case "unknown city":
-                                    errorMessage = getString(R.string.err_invalid_city);
-                                    break;
-                                case "no data for this location":
-                                    errorMessage = getString(R.string.err_no_area_data);
-                                    break;
-                                case "no more requests":
-                                    errorMessage = getString(R.string.err_no_more_requests);
-                                    break;
-                                case "param invalid":
-                                    errorMessage = getString(R.string.err_param_invalid);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            Snackbar.make(weatherScrollView, errorMessage, Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(weatherScrollView,
+                                    Utility.getWeatherErrMsg(WeatherActivity.this, weather.status), Snackbar.LENGTH_LONG).show();
                         }
 
                         weatherScrollView.setVisibility(View.VISIBLE);

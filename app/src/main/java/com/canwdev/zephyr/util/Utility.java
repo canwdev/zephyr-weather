@@ -1,10 +1,14 @@
 package com.canwdev.zephyr.util;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.canwdev.zephyr.R;
 import com.canwdev.zephyr.db.City;
 import com.canwdev.zephyr.db.County;
 import com.canwdev.zephyr.db.Province;
@@ -177,8 +181,58 @@ public class Utility {
         return null;
     }
 
-    // 根据设置获取天气（用于后台服务）
+    // 获取API返回的错误信息，返回String
+    public static String getWeatherErrMsg(Context context, String errorMessage) {
 
+        switch (errorMessage) {
+            case "invalid key":
+                errorMessage = context.getString(R.string.err_invalid_key);
+                break;
+            case "unknown city":
+                errorMessage = context.getString(R.string.err_invalid_city);
+                break;
+            case "no data for this location":
+                errorMessage = context.getString(R.string.err_no_area_data);
+                break;
+            case "no more requests":
+                errorMessage = context.getString(R.string.err_no_more_requests);
+                break;
+            case "param invalid":
+                errorMessage = context.getString(R.string.err_param_invalid);
+                break;
+            default:
+                errorMessage = context.getString(R.string.err_unknow_error);
+                break;
+        }
+        return errorMessage;
+    }
+
+    /*
+     * 判断服务是否启动,context上下文对象 ，className服务的name
+     */
+    public static boolean isServiceRunning(Context mContext, String className) {
+
+        boolean isRunning = false;
+        ActivityManager activityManager = (ActivityManager) mContext
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> serviceList = activityManager
+                .getRunningServices(100);
+
+        if (!(serviceList.size() > 0)) {
+            return false;
+        }
+
+        for (int i = 0; i < serviceList.size(); i++) {
+            // Log.d(TAG, "isServiceRunning: "+i+". "+serviceList.get(i).service.getClassName());
+            if (serviceList.get(i).service.getClassName().equals(className)) {
+                isRunning = true;
+                break;
+            }
+        }
+        return isRunning;
+    }
+
+    // 根据设置判断获取天气
     public Weather getWeather() {
         String weatherCache = pref.getString(Conf.PREF_WEATHER_SAVE, null);
         String setWeatherId = pref.getString(Conf.PREF_WEATHER_ID, null);
@@ -221,7 +275,7 @@ public class Utility {
         }
     }
 
-
+    // 根据设置请求天气
     public Weather requestWeather() {
         String setCityWeatherId = "city=" + pref.getString(Conf.PREF_WEATHER_ID, null);
         String apiKey = "&key=" + Conf.getKey(context);
@@ -241,6 +295,9 @@ public class Utility {
                     if (weather != null && "ok".equals(weather.status)) {
                         editor.putString(Conf.PREF_WEATHER_SAVE, responseText);
                         editor.apply();
+                    } else if (weather != null) {
+                        // 显示错误信息
+                        //Toast.makeText(context, Utility.getWeatherErrMsg(context, weather.status), Toast.LENGTH_SHORT).show();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

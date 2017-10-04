@@ -69,7 +69,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:text="@string/area_settings"
             android:textColor="?android:attr/textColorSecondaryInverse" />
 
         <TextView
@@ -80,7 +79,6 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:gravity="right"
-            android:text="@string/weather_now_detail"
             android:textColor="@android:color/background_light"
             android:textSize="18sp" />
     </LinearLayout>
