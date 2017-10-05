@@ -3,10 +3,8 @@ package com.canwdev.zephyr.util;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.canwdev.zephyr.R;
 import com.canwdev.zephyr.db.City;
@@ -28,6 +26,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -236,7 +236,6 @@ public class Utility {
     public Weather getWeather() {
         String weatherCache = pref.getString(Conf.PREF_WEATHER_SAVE, null);
         String setWeatherId = pref.getString(Conf.PREF_WEATHER_ID, null);
-        //cityWeatherId = "city=" + setWeatherId;
         // 有缓存时直接解析天气数据
         if (weatherCache != null) {
             Weather cWeather = Utility.handleWeatherResponse(weatherCache);
@@ -246,7 +245,7 @@ public class Utility {
                     // 检查默认地区设置是否一致
                     if (!cWeather.basic.weatherId.equals(setWeatherId)) {
                         // 不一致
-                        //requestWeather(cityWeatherId);
+                        return requestWeather(setWeatherId);
                     } else {
                         // 如果缓存时间与系统时间相差大于-小时，则更新
                         SimpleDateFormat dateFormat = new SimpleDateFormat(Conf.DATE_TIME_FORMAT);
@@ -255,9 +254,11 @@ public class Utility {
                             Date SystemTime = new Date();
                             long diff = SystemTime.getTime() - cachedUpdateTime.getTime();
                             double hours = (double) diff / (1000 * 60 * 60);
+                            Log.d(TAG, "hours=" + hours + " WEATHER_UPDATE_HOURS=" + Conf.WEATHER_UPDATE_HOURS);
                             if (hours > Conf.WEATHER_UPDATE_HOURS) {
                                 return requestWeather();
                             } else {
+                                Log.d(TAG, "getWeather: cWeather");
                                 return cWeather;
                             }
                         } catch (ParseException e) {
@@ -275,8 +276,52 @@ public class Utility {
         }
     }
 
+    // 根据 weatherId 请求天气
+    public Weather requestWeather(String weatherId) {
+        setBingPic();
+        Log.d(TAG, "requestWeather: from server by weatherId");
+        String cityWeatherId = "city=" + weatherId;
+        String apiKey = "&key=" + Conf.getKey(context);
+        final String weatherUrl = Conf.WEATHER_API_URL + cityWeatherId + apiKey;
+        Thread requestThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    Request request = new Request.Builder()
+                            .url(weatherUrl)
+                            .build();
+                    Response response = client.newCall(request).execute();
+
+                    final String responseText = response.body().string();
+                    weather = Utility.handleWeatherResponse(responseText);
+                    if (weather != null && "ok".equals(weather.status)) {
+                        editor.putString(Conf.PREF_WEATHER_SAVE, responseText);
+                        editor.apply();
+                        Utility.recordRecentArea(weather.basic.weatherId, weather.basic.cityName);
+                    } else if (weather != null) {
+                        Log.e(TAG, Utility.getWeatherErrMsg(context, weather.status));
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        requestThread.start();
+        try {
+            requestThread.join();
+            return weather;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     // 根据设置请求天气
     public Weather requestWeather() {
+        setBingPic();
+        Log.d(TAG, "requestWeather: from server by settings");
         String setCityWeatherId = "city=" + pref.getString(Conf.PREF_WEATHER_ID, null);
         String apiKey = "&key=" + Conf.getKey(context);
         final String weatherUrl = Conf.WEATHER_API_URL + setCityWeatherId + apiKey;
@@ -295,9 +340,10 @@ public class Utility {
                     if (weather != null && "ok".equals(weather.status)) {
                         editor.putString(Conf.PREF_WEATHER_SAVE, responseText);
                         editor.apply();
+                        Utility.recordRecentArea(weather.basic.weatherId, weather.basic.cityName);
                     } else if (weather != null) {
                         // 显示错误信息
-                        //Toast.makeText(context, Utility.getWeatherErrMsg(context, weather.status), Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, Utility.getWeatherErrMsg(context, weather.status));
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -314,5 +360,23 @@ public class Utility {
             e.printStackTrace();
         }
         return null;
+    }
+
+    // 获取 Bing 每日一图地址，保存设置
+    public void setBingPic() {
+        final String bingPicApiUrl = "http://guolin.tech/api/bing_pic";
+        HttpUtil.sendOkHttpRequest(bingPicApiUrl, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String bingPicUrl = response.body().string();
+                editor.putString(Conf.PREF_BG_URL, bingPicUrl);
+                editor.apply();
+            }
+        });
     }
 }

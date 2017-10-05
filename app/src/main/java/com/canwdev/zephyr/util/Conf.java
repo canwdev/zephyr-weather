@@ -28,7 +28,8 @@ public class Conf {
     public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm";
     public static final String WIDGET_CLOCK_TIME_FORMAT = "HH:mm";
     public static final String WIDGET_CLOCK_DATE_FORMAT = "yyyy-MM-dd";
-    public static final int WEATHER_UPDATE_HOURS = 1 * 60 * 60 * 1000;
+    public static final int WEATHER_SERVER_UPDATE_MS = 30*60*1000;
+    public static final double WEATHER_UPDATE_HOURS = 1.03;
 
     public static String getKey(Context context) {
         SharedPreferences pref = context.getSharedPreferences(Conf.PREF_FILE_NAME, context.MODE_PRIVATE);

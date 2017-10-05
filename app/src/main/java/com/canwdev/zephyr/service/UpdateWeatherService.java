@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.canwdev.zephyr.R;
 import com.canwdev.zephyr.WeatherActivity;
@@ -28,7 +29,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class UpdateWeatherService extends Service {
-    private static final String TAG = "UWS!!";
+    private static final String TAG = "UpdateWeatherService!!";
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -37,21 +38,31 @@ public class UpdateWeatherService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        createNotifation();
-        updateBingPic();
-        // 每小时后台更新一次
-        AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        long triggerAtTime = SystemClock.elapsedRealtime() + Conf.WEATHER_UPDATE_HOURS;
-        Intent i = new Intent(this, UpdateWeatherService.class);
-        PendingIntent pi = PendingIntent.getService(this, 0, i, 0);
-        manager.cancel(pi);
-        manager.set(AlarmManager.ELAPSED_REALTIME, triggerAtTime, pi);
+        SharedPreferences pref = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE);
+
+        // 再次确定设置中已开启
+        if (pref.getBoolean(Conf.PREF_ENABLE_SERVICE, false)) {
+            Log.d(TAG, "UpdateWeatherService: onStartCommand");
+            createNotification();
+            new Utility(this).setBingPic();
+            // 每小时后台更新一次
+            AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            long triggerAtTime = SystemClock.elapsedRealtime() + Conf.WEATHER_SERVER_UPDATE_MS;
+            Intent i = new Intent(this, UpdateWeatherService.class);
+            PendingIntent pi = PendingIntent.getService(this, 0, i, 0);
+            manager.cancel(pi);
+            manager.set(AlarmManager.ELAPSED_REALTIME, triggerAtTime, pi);
+
+        } else {
+            Intent intent1 = new Intent(this, UpdateWeatherService.class);
+            stopService(intent1);
+        }
 
         return super.onStartCommand(intent, flags, startId);
     }
 
     // 显示一条前台通知
-    private void createNotifation() {
+    private void createNotification() {
         Weather weather = new Utility(this).getWeather();
 
         if (weather != null && "ok".equals(weather.status)) {
@@ -87,22 +98,5 @@ public class UpdateWeatherService extends Service {
         return builder.build();
     }
 
-    // 获取 Bing 每日一图地址，保存设置
-    private void updateBingPic() {
-        final String bingPicApiUrl = "http://guolin.tech/api/bing_pic";
-        HttpUtil.sendOkHttpRequest(bingPicApiUrl, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String bingPicUrl = response.body().string();
-                SharedPreferences.Editor editor = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE).edit();
-                editor.putString(Conf.PREF_BG_URL, bingPicUrl);
-                editor.apply();
-            }
-        });
-    }
 }
