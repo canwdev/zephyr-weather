@@ -6,7 +6,7 @@
 
 A simple Android weather app using the heweather API.
 
-* 下载： [APK](https://github.com/canwdev/zephyr-weather/raw/master/release/ZephyrWeather-1.4.apk)
+* 下载： [![Github Releases (by Release)](https://img.shields.io/github/downloads/atom/atom/v1.4/total.svg)](https://github.com/canwdev/zephyr-weather/raw/master/release/ZephyrWeather-1.4.apk)
 * The first commit code from my another project [learn_android_1stcode](https://github.com/canwdev/learn_android_1stcode)
 
 ---
