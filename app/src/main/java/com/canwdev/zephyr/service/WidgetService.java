@@ -98,6 +98,8 @@ public class WidgetService extends Service {
 
             RemoteViews remoteView = new RemoteViews(getPackageName(), R.layout.widget_weather);
             remoteView.setTextViewText(R.id.textView_widget_time, time);
+            // remoteView.setImageViewBitmap(R.id.textView_widget_time1, Utility.buildFont(time,WidgetService.this));
+
             remoteView.setTextViewText(R.id.textView_widget_date, date);
 
             ComponentName componentName = new ComponentName(getApplicationContext(), WeatherWidget.class);

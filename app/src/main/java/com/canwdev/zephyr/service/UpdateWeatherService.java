@@ -86,7 +86,7 @@ public class UpdateWeatherService extends Service {
         Intent intent = new Intent(this, WeatherActivity.class);
         PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_cloud_circle_black_24dp)
+                .setSmallIcon(R.drawable.ic_stat_weather)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round))
                 .setContentIntent(pi)
                 .setWhen(updateTime.getTime())

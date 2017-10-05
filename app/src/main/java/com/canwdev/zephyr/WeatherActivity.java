@@ -3,7 +3,9 @@ package com.canwdev.zephyr;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,6 +21,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
@@ -84,6 +87,7 @@ public class WeatherActivity extends AppCompatActivity {
     private LinearLayout hourlyForecastLayout;
     private LinearLayout dailyForecastLayout;
     private TextView aqiText;
+    private TextView qualityText;
     private TextView pm25Text;
     private TextView comfortText;
     private TextView wearingText;
@@ -113,7 +117,10 @@ public class WeatherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
         initView();
     }
 
@@ -147,7 +154,12 @@ public class WeatherActivity extends AppCompatActivity {
         hourlyForecastLayout = (LinearLayout) findViewById(R.id.LinearLayout_hourlyForecast);
         dailyForecastLayout = (LinearLayout) findViewById(R.id.LinearLayout_dailyForecast);
         aqiText = (TextView) findViewById(R.id.textView_aqi);
+        qualityText = (TextView) findViewById(R.id.textView_quality);
         pm25Text = (TextView) findViewById(R.id.textView_pm25);
+        // 自定义字体
+        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/clockopia.ttf");
+        aqiText.setTypeface(face);
+        pm25Text.setTypeface(face);
         comfortText = (TextView) findViewById(R.id.textView_comfort);
         carWashText = (TextView) findViewById(R.id.textView_carWash);
         wearingText = (TextView) findViewById(R.id.textView_wearing);
@@ -262,7 +274,7 @@ public class WeatherActivity extends AppCompatActivity {
         startActivity(Intent.createChooser(intent, getString(R.string.share_with)));
     }
 
-    // 程序onStart时执行检查动作
+    // Activity 恢复前台时执行检查动作
     @Override
     protected void onStart() {
         super.onStart();
@@ -434,6 +446,12 @@ public class WeatherActivity extends AppCompatActivity {
                         weatherScrollView.setVisibility(View.VISIBLE);
                         Snackbar.make(weatherScrollView, getString(R.string.get_weather_info_failed), Snackbar.LENGTH_SHORT).show();
                         swipeRefresh.setRefreshing(false);
+                        // 加载失败后加载缓存
+                        String weatherCache = pref.getString(Conf.PREF_WEATHER_SAVE, null);
+                        if (weatherCache != null) {
+                            Weather cWeather = Utility.handleWeatherResponse(weatherCache);
+                            showWeatherInfo(cWeather);
+                        }
                     }
                 });
             }
@@ -507,6 +525,7 @@ public class WeatherActivity extends AppCompatActivity {
         CardView cardViewAqi = (CardView) findViewById(R.id.CardView_aqi);
         if (weather.aqi != null) {
             aqiText.setText(weather.aqi.city.aqi);
+            qualityText.setText(weather.aqi.city.quality);
             pm25Text.setText(weather.aqi.city.pm25);
             cardViewAqi.setVisibility(View.VISIBLE);
         } else {

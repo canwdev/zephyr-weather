@@ -3,6 +3,11 @@ package com.canwdev.zephyr.util;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -378,5 +383,22 @@ public class Utility {
                 editor.apply();
             }
         });
+    }
+
+    // Widget 自定义字体
+    public static Bitmap buildFont(String time, Context context){
+        Bitmap myBitmap = Bitmap.createBitmap(240, 80, Bitmap.Config.ARGB_4444);
+        Canvas myCanvas = new Canvas(myBitmap);
+        Paint paint = new Paint();
+        Typeface clock = Typeface.createFromAsset(context.getAssets(),"fonts/clockopia.ttf");
+        paint.setAntiAlias(true);
+        paint.setSubpixelText(true);
+        paint.setTypeface(clock);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(80);
+        paint.setTextAlign(Paint.Align.CENTER);
+        myCanvas.drawText(time, 100, 60, paint);
+        return myBitmap;
     }
 }
