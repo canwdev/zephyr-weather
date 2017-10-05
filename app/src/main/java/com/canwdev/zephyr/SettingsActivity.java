@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -29,8 +30,9 @@ import org.litepal.crud.DataSupport;
 
 import java.io.File;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity implements Thread.UncaughtExceptionHandler{
 
+    private static final String TAG = "Settings!!";
     Switch serviceSwitch;
     Switch backgroundSwitch;
     private boolean resetOption = false;
@@ -42,6 +44,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Thread.setDefaultUncaughtExceptionHandler(this);
         setContentView(R.layout.activity_settings);
 
         ActionBar actionBar = getSupportActionBar();
@@ -234,9 +237,14 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     @Override
+    public void uncaughtException(Thread thread, Throwable throwable) {
+        Log.e(TAG, "uncaughtException: ", throwable);
+    }
+
+    /*@Override
     public void onBackPressed() {
         super.onBackPressed();
         saveSettings();
         finish();
-    }
+    }*/
 }
