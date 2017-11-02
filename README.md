@@ -24,7 +24,9 @@ A simple Android weather application that uses the heweather v5 API.
 
 ---
 
-<img src="./release/preview_20171004.png" width="100%" height="100%"/>
+<img src="./release/v1.4.1-1.jpg" width="100%" height="100%"/>
+
+<img src="./release/v1.4.1-2.jpg" width="100%" height="100%"/>
 
 ---
 
