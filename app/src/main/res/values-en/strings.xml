@@ -62,8 +62,7 @@
     <string name="err_unknow_error">Unknow error</string>
     <string name="city_name">City name</string>
     <string name="weather_update_time">Update time</string>
-    <string name="u_windforce">""</string>
     <string name="activity_test">Zephyr Weather Test</string>
     <string name="app_name2">Weather</string>
-    <string name="precipitation_probability" translatable="false">Rain%</string>
+    <string name="precipitation_probability">Rain%</string>
 </resources>
