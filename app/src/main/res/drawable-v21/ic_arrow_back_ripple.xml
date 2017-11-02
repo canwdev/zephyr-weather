@@ -7,6 +7,5 @@
             <corners android:radius="50dp" />
         </shape>
     </item>
-    <item android:drawable="@drawable/ic_arrow_back_black_24dp">
-    </item>
+    <item android:drawable="@drawable/ic_arrow_back_black_24dp"></item>
 </ripple>

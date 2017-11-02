@@ -1,5 +1,6 @@
 package com.canwdev.zephyr;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -9,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -98,6 +100,7 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView sportText;
     private String shareWeatherText;
     /*刷新动画效果*/
+    @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -119,7 +122,7 @@ public class WeatherActivity extends AppCompatActivity {
         setContentView(R.layout.activity_weather);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
         initView();
     }
@@ -157,9 +160,12 @@ public class WeatherActivity extends AppCompatActivity {
         qualityText = (TextView) findViewById(R.id.textView_quality);
         pm25Text = (TextView) findViewById(R.id.textView_pm25);
         // 自定义字体
-        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/clockopia.ttf");
-        aqiText.setTypeface(face);
-        pm25Text.setTypeface(face);
+        Typeface fontBig = Typeface.createFromAsset(getAssets(), "fonts/GoogleSans.ttf");
+        Typeface clockopia = Typeface.createFromAsset(getAssets(), "fonts/clockopia.ttf");
+        temperatureText.setTypeface(fontBig);
+        aqiText.setTypeface(clockopia);
+        pm25Text.setTypeface(clockopia);
+
         comfortText = (TextView) findViewById(R.id.textView_comfort);
         carWashText = (TextView) findViewById(R.id.textView_carWash);
         wearingText = (TextView) findViewById(R.id.textView_wearing);
@@ -169,6 +175,13 @@ public class WeatherActivity extends AppCompatActivity {
         uvText = (TextView) findViewById(R.id.textView_uv);
 
         pref = getSharedPreferences(Conf.PREF_FILE_NAME, MODE_PRIVATE);
+
+        // 解决FileUriExposedException的问题
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+            builder.detectFileUriExposure();
+        }
 
         // 下拉刷新动作
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -249,7 +262,7 @@ public class WeatherActivity extends AppCompatActivity {
         bitmap = Bitmap.createBitmap(bitmap);
         pscView.setDrawingCacheEnabled(false);
         if (bitmap != null) {
-            final File f = new File(getExternalCacheDir(), "img_cache.png");
+            final File f = new File(getExternalCacheDir(), "share_weather.png");
             if (f.exists()) {
                 f.delete();
             }
@@ -270,7 +283,6 @@ public class WeatherActivity extends AppCompatActivity {
             intent.putExtra(Intent.EXTRA_TEXT, shareWeatherText);
             intent.setType("text/plain");
         }
-
         startActivity(Intent.createChooser(intent, getString(R.string.share_with)));
     }
 
@@ -325,7 +337,7 @@ public class WeatherActivity extends AppCompatActivity {
                 weatherScrollView.setVisibility(View.INVISIBLE);
                 Intent intent = new Intent(WeatherActivity.this, ChooseAreaActivity.class);
                 // 去选择地区
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, INTENT_CHOOSE_AREA);
             }
         }
 
@@ -465,7 +477,7 @@ public class WeatherActivity extends AppCompatActivity {
         nowDetailTitleText.setText(weather.basic.cityName);
         titleUpdateTimeText.setText(weather.basic.update.updateTime);
         temperatureText.setText(weather.now.temperature + getString(R.string.u_celsius));
-        weatherStatusText.setText(weather.now.condition.info + getString(R.string.u_weather_decorate));
+        weatherStatusText.setText(weather.now.condition.info);
         // 设置分享信息
         shareWeatherText = weather.basic.cityName + ", "
                 + weather.now.condition.info + ", "
@@ -481,7 +493,7 @@ public class WeatherActivity extends AppCompatActivity {
         visibilityDetailText.setText(weather.now.visibility + getString(R.string.u_kilometer));
         degreeDetailText.setText(weather.now.wind.degree);
         directionDetailText.setText(weather.now.wind.direction);
-        windforceDetailText.setText(weather.now.wind.windforce + getString(R.string.u_windforce));
+        windforceDetailText.setText(weather.now.wind.windforce);
         speedDetailText.setText(weather.now.wind.speed + getString(R.string.u_windspeed));
         /* 天气详细信息结束 */
         // 解析几小时预报

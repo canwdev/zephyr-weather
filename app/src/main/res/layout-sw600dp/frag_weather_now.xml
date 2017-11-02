@@ -28,6 +28,6 @@
         android:shadowRadius="3"
         android:text="00℃"
         android:textColor="@android:color/background_light"
-        android:textSize="64sp" />
+        android:textSize="100sp" />
 
 </LinearLayout>

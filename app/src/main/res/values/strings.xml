@@ -8,7 +8,7 @@
     <string name="area_settings">地区设置</string>
     <string name="dailyForecast">明后天预报</string>
     <string name="weather_aqi">空气质量指数</string>
-    <string name="suggestion_comfortable">舒适度</string>
+    <string name="suggestion_comfortable">舒适度指数</string>
     <string name="suggestion_car_washing">洗车指数</string>
     <string name="suggestion_sport">运动指数</string>
     <string name="suggestion">生活建议</string>
@@ -24,20 +24,20 @@
     <string name="weather_felling">体感温度</string>
     <string name="weather_wind_direction">风向</string>
     <string name="weather_now_detail">实况天气</string>
-    <string name="weather_wind_degree">360°风向</string>
+    <string name="weather_wind_degree">风向360°</string>
     <string name="weather_humidity">相对湿度</string>
-    <string name="weather_pressure">气压</string>
-    <string name="hourlyForecast">未来每小时预报</string>
-    <string name="precipitation_probability">降水概率↓</string>
+    <string name="weather_pressure">大气压强</string>
+    <string name="hourlyForecast">每小时预报</string>
+    <string name="precipitation_probability">雨%</string>
     <string name="suggestion_cold">感冒指数</string>
     <string name="suggestion_travel">旅游指数</string>
     <string name="suggestion_uv">紫外线指数</string>
-    <string name="suggestion_wearing">穿衣建议</string>
+    <string name="suggestion_wearing">穿衣指数</string>
     <string name="settings_custom_area_code">自定义区域代码</string>
     <string name="settings_custom_api_key">自定义 API KEY</string>
     <string name="settings_enable_background_image">启用 Bing 每日一图</string>
     <string name="settings_enable_update_service">启用后台服务</string>
-    <string name="about_github">Github 查看源码</string>
+    <string name="about_github">Github 开源代码</string>
     <string name="settings_clear_all">重置全部设置</string>
     <string name="about_developer" translatable="false">canwdev</string>
     <string name="share_with">分享</string>
@@ -72,8 +72,7 @@
     <string name="u_percent" translatable="false">%</string>
     <string name="u_millimeter" translatable="false">mm</string>
     <string name="u_kilometer" translatable="false">km</string>
-    <string name="u_windforce">级</string>
-    <string name="u_windspeed" translatable="false">kmph</string>
-    <string name="u_weather_decorate">天</string>
+    <string name="u_windspeed" translatable="false">km/h</string>
     <string name="activity_test">微风天气测试</string>
+    <string name="app_name2">天气</string>
 </resources>

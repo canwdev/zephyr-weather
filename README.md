@@ -1,12 +1,12 @@
 # 微风天气 · Zephyr Weather
 
-<img src="./app/src/main/ic_launcher-web.png" width="30%"/>
+<img src="./app/src/main/ic_launcher-web.png" height="100px" width="100px"/>
 
-一个简单的 Android 天气应用，使用和风天气接口。
+一个简单的 Android 天气应用，使用和风天气v5接口。
 
-A simple Android weather app using the heweather API.
+A simple Android weather application that uses the heweather v5 API.
 
-* 下载： [![Github Releases (by Release)](https://img.shields.io/badge/download-2.4MB-green.svg)](https://github.com/canwdev/zephyr-weather/raw/master/release/ZephyrWeather-1.4.apk)
+* 下载： [Download](https://github.com/canwdev/zephyr-weather/raw/master/release/ZephyrWeather-1.4.apk)
 * The first commit code from my another project [learn_android_1stcode](https://github.com/canwdev/learn_android_1stcode)
 
 ---
@@ -24,7 +24,7 @@ A simple Android weather app using the heweather API.
 
 ---
 
-<img src="./release/preview_20171004.png" width="100%"/>
+<img src="./release/preview_20171004.png" width="100%" height="100%"/>
 
 ---
 

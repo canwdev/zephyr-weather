@@ -41,25 +41,7 @@
 
                     <include layout="@layout/frag_weather_title" />
 
-                    <LinearLayout
-                        android:id="@+id/LinearLayout_mainAnim"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <include layout="@layout/frag_weather_now" />
-
-                        <include layout="@layout/frag_weather_now_detail" />
-
-                        <include layout="@layout/frag_weather_hourly_forecast" />
-
-                        <include layout="@layout/frag_weather_daily_forecast" />
-
-                        <include layout="@layout/frag_weather_aqi" />
-
-                        <include layout="@layout/frag_weather_suggestion" />
-                    </LinearLayout>
-
+                    <include layout="@layout/activity_weather_cards"/>
 
                 </LinearLayout>
             </ScrollView>

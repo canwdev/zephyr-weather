@@ -24,7 +24,8 @@
         android:text="@string/city_name"
         android:textColor="@android:color/background_light"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textStyle="bold" android:shadowColor="@color/cardview_dark_background"
+        android:shadowRadius="1"/>
 
     <ImageButton
         android:id="@+id/button_shareWeather"

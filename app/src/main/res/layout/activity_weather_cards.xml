@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout_mainAnim"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <include layout="@layout/frag_weather_now" />
+
+    <include layout="@layout/frag_weather_now_detail" />
+
+    <include layout="@layout/frag_weather_hourly_forecast" />
+
+    <include layout="@layout/frag_weather_daily_forecast" />
+
+    <include layout="@layout/frag_weather_aqi" />
+
+    <include layout="@layout/frag_weather_suggestion" />
+</LinearLayout>
